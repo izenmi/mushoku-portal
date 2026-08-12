@@ -2,9 +2,10 @@
   "note": "sp = 初登場(または存在が確定する)書籍巻の序数。chart の数値(0-100)は全て管理人推定。tier の階級は原作既述のもの以外に est: true(管理人推定)を明示する。birthEst: true の甲龍暦生年は作中描写からの概算。",
   "groups": [
     { "key": "family", "label": "グレイラット家とブエナ村" },
+    { "key": "boreas", "label": "ボレアス家とフィットア領" },
     { "key": "mentor", "label": "師匠たち" },
     { "key": "party", "label": "旅の仲間" },
-    { "key": "univ", "label": "ラノア魔法大学" },
+    { "key": "univ", "label": "ラノア魔法大学とその周辺" },
     { "key": "power", "label": "強者たち・七大列強" },
     { "key": "enemy", "label": "敵対者" },
     { "key": "other", "label": "その他" }
@@ -15,6 +16,7 @@
     "migurd": "ミグルド族",
     "elf": "エルフ系",
     "beast": "獣族",
+    "dwarf": "ドワーフ",
     "demon": "魔族",
     "dragon": "龍族",
     "other": "その他"
@@ -346,6 +348,330 @@
       "notes": [
         { "sp": 16, "text": "ルーデウスを配下に迎え、人神打倒の同志とする。" }
       ]
+    },
+    {
+      "id": "lucy",
+      "name": "ルーシー・グレイラット",
+      "kana": "るーしー・ぐれいらっと",
+      "group": "family",
+      "race": "human",
+      "sp": 12,
+      "portrait": false,
+      "birth": 423,
+      "birthEst": true,
+      "bio": "ルーデウスとシルフィエットの長女。両親の良いところを受け継いだしっかり者に育っていく。",
+      "notes": []
+    },
+    {
+      "id": "lara",
+      "name": "ララ・グレイラット",
+      "kana": "らら・ぐれいらっと",
+      "group": "family",
+      "race": "migurd",
+      "sp": 17,
+      "portrait": false,
+      "birth": 426,
+      "birthEst": true,
+      "bio": "ルーデウスとロキシーの長女。ほとんど泣かない不思議な赤ん坊で、どこか只者ではない気配を漂わせる。",
+      "notes": []
+    },
+    {
+      "id": "ars",
+      "name": "アルス・グレイラット",
+      "kana": "あるす・ぐれいらっと",
+      "group": "family",
+      "race": "human",
+      "sp": 20,
+      "portrait": false,
+      "birth": 428,
+      "birthEst": true,
+      "bio": "ルーデウスとエリスの長男。母親譲りの気の強さを早くも覗かせる。",
+      "notes": []
+    },
+    {
+      "id": "sauros",
+      "name": "サウロス・ボレアス・グレイラット",
+      "kana": "さうろす・ぼれあす・ぐれいらっと",
+      "group": "boreas",
+      "race": "human",
+      "sp": 2,
+      "portrait": true,
+      "birth": null,
+      "bio": "フィットア領を治めるボレアス家の当主でエリスの祖父。豪放磊落を絵に描いたような偉丈夫で、孫娘を溺愛している。",
+      "status": { "sp": 6, "text": "死亡(転移事件後の混乱の中で)" },
+      "notes": [
+        { "sp": 6, "text": "転移事件の責任を問われ、非業の最期を遂げていたことが語られる。" }
+      ]
+    },
+    {
+      "id": "philip",
+      "name": "フィリップ・ボレアス・グレイラット",
+      "kana": "ふぃりっぷ・ぼれあす・ぐれいらっと",
+      "group": "boreas",
+      "race": "human",
+      "sp": 2,
+      "portrait": true,
+      "birth": null,
+      "bio": "エリスの父でロアの市長。食えない策略家だが、ルーデウスの才能をいち早く見抜き娘の家庭教師に迎えた。",
+      "status": { "sp": 6, "text": "死亡(転移先の紛争地帯で)" },
+      "notes": []
+    },
+    {
+      "id": "hilda",
+      "name": "ヒルダ・ボレアス・グレイラット",
+      "kana": "ひるだ・ぼれあす・ぐれいらっと",
+      "group": "boreas",
+      "race": "human",
+      "sp": 2,
+      "portrait": true,
+      "birth": null,
+      "bio": "エリスの母。気位が高く娘に厳しいが、その根底にあるのは家族への愛情だった。",
+      "status": { "sp": 6, "text": "死亡(転移先の紛争地帯で)" },
+      "notes": []
+    },
+    {
+      "id": "rinia",
+      "name": "リニアーナ・デドルディア",
+      "kana": "りにあーな・でどるでぃあ",
+      "group": "univ",
+      "race": "beast",
+      "sp": 7,
+      "portrait": true,
+      "birth": null,
+      "bio": "大森林デドルディア族の族長候補、通称リニア。魔法大学ではプルセナと共に騒動の中心にいる猫系女子。",
+      "notes": []
+    },
+    {
+      "id": "pursena",
+      "name": "プルセナ・アドルディア",
+      "kana": "ぷるせな・あどるでぃあ",
+      "group": "univ",
+      "race": "beast",
+      "sp": 7,
+      "portrait": true,
+      "birth": null,
+      "bio": "アドルディア族の族長候補。食い意地の張った犬系女子で、リニアとは腐れ縁の相棒。",
+      "notes": []
+    },
+    {
+      "id": "ariel",
+      "name": "アリエル・アネモイ・アスラ",
+      "kana": "ありえる・あねもい・あすら",
+      "group": "univ",
+      "race": "human",
+      "sp": 7,
+      "portrait": true,
+      "birth": null,
+      "bio": "アスラ王国第二王女。王位継承の野心を胸に、護衛たちと共にラノア魔法大学へ留学している。人を惹きつけるカリスマと胆力の持ち主。",
+      "notes": [
+        { "sp": 18, "text": "政変を制し、アスラ王国の新たな女王として即位する。" }
+      ]
+    },
+    {
+      "id": "luke",
+      "name": "ルーク・ノトス・グレイラット",
+      "kana": "るーく・のとす・ぐれいらっと",
+      "group": "univ",
+      "race": "human",
+      "sp": 7,
+      "portrait": true,
+      "birth": null,
+      "bio": "ノトス・グレイラット家の貴公子で、アリエル王女の護衛騎士。女性関係は華やかだが、主への忠義は本物。パウロの縁戚にあたる。",
+      "notes": []
+    },
+    {
+      "id": "ginger",
+      "name": "ジンジャー・ヨーク",
+      "kana": "じんじゃー・よーく",
+      "group": "univ",
+      "race": "human",
+      "sp": 7,
+      "portrait": true,
+      "birth": null,
+      "bio": "シーローン王国出身の女騎士。ザノバに付き従い、その世話役と護衛を務める苦労人。",
+      "notes": []
+    },
+    {
+      "id": "juli",
+      "name": "ジュリ",
+      "kana": "じゅり",
+      "group": "univ",
+      "race": "dwarf",
+      "sp": 8,
+      "portrait": false,
+      "birth": null,
+      "bio": "ザノバの人形製作を手伝うために引き取られたドワーフ族の少女。師匠たちのもとで、めきめきと職人の腕を上げていく。",
+      "notes": []
+    },
+    {
+      "id": "elinalise",
+      "name": "エリナリーゼ・ドラゴンロード",
+      "kana": "えりなりーぜ・どらごんろーど",
+      "group": "party",
+      "race": "elf",
+      "sp": 4,
+      "portrait": true,
+      "birth": null,
+      "ageNote": "数百歳(エルフ)",
+      "bio": "数百年を生きるエルフの冒険者で、パウロの元パーティメンバー。ある呪いを抱えており男性遍歴は誤解されがちだが、実は面倒見のいい姉御肌。",
+      "notes": [
+        { "sp": 9, "text": "魔法大学で出会ったクリフと恋仲になり、やがて結ばれる。" }
+      ]
+    },
+    {
+      "id": "talhand",
+      "name": "タルハンド",
+      "kana": "たるはんど",
+      "group": "party",
+      "race": "dwarf",
+      "sp": 4,
+      "portrait": true,
+      "birth": null,
+      "bio": "パウロの元パーティメンバーのドワーフ。土魔術と酒をこよなく愛する寡黙な職人肌。",
+      "notes": []
+    },
+    {
+      "id": "geese",
+      "name": "ギース・ヌーカディア",
+      "kana": "ぎーす・ぬーかでぃあ",
+      "group": "party",
+      "race": "demon",
+      "sp": 4,
+      "portrait": true,
+      "birth": null,
+      "bio": "猿顔の魔族の冒険者で、パウロの悪友。賭け事と世渡りの達人で、どこか憎めない兄貴分。……のはずだった。",
+      "status": { "sp": 26, "text": "死亡(最終決戦)" },
+      "notes": [
+        { "sp": 22, "text": "人神の使徒として長く暗躍していたことが明らかになる。" }
+      ]
+    },
+    {
+      "id": "pax",
+      "name": "パックス・シーローン",
+      "kana": "ぱっくす・しーろーん",
+      "group": "enemy",
+      "race": "human",
+      "sp": 5,
+      "portrait": true,
+      "birth": null,
+      "bio": "シーローン王国の第七王子でザノバの弟。屈折した野心を抱え、リーリャたちの軟禁を巡ってルーデウスと因縁を持つ。",
+      "status": { "sp": 15, "text": "死亡(シーローン政変)" },
+      "notes": [
+        { "sp": 15, "text": "王位に就くも国は乱れ、悲劇的な結末を迎える。" }
+      ]
+    },
+    {
+      "id": "randolph",
+      "name": "ランドルフ・マリーアン",
+      "kana": "らんどるふ・まりーあん",
+      "group": "power",
+      "race": "human",
+      "sp": 15,
+      "portrait": true,
+      "birth": null,
+      "bio": "七大列強の一角「死神」。シーローン王国に仕える剣士で、飄々とした佇まいと底知れぬ実力のギャップが恐ろしい。",
+      "notes": []
+    },
+    {
+      "id": "darius",
+      "name": "ダリウス・シルバ・ガニウス",
+      "kana": "だりうす・しるば・がにうす",
+      "group": "enemy",
+      "race": "human",
+      "sp": 17,
+      "portrait": false,
+      "birth": null,
+      "bio": "アスラ王国の上級大臣。宮廷の実力者として権勢を振るい、アリエルの王位継承の前に立ちはだかる。",
+      "status": { "sp": 18, "text": "失脚・死亡(アスラ政変)" },
+      "notes": []
+    },
+    {
+      "id": "alek",
+      "name": "アレクサンダー・ライバック",
+      "kana": "あれくさんだー・らいばっく",
+      "group": "power",
+      "race": "human",
+      "sp": 17,
+      "portrait": true,
+      "birth": null,
+      "bio": "三代目「北神カールマン」を名乗る若き天才剣士。退屈を嫌い、面白い戦いを求めて大事件にも平気で顔を出す。",
+      "tiers": [
+        { "label": "北神流(三代目北神)", "tier": "神級", "sp": 17 }
+      ],
+      "notes": []
+    },
+    {
+      "id": "reida",
+      "name": "レイダ・リィア",
+      "kana": "れいだ・りぃあ",
+      "group": "power",
+      "race": "human",
+      "sp": 17,
+      "portrait": true,
+      "birth": null,
+      "bio": "水神流の頂点「水神」。老齢ながら剣を執れば別格の強者で、アスラ政変では敵として立ちはだかる。",
+      "tiers": [
+        { "label": "水神流(水神)", "tier": "神級", "sp": 17 }
+      ],
+      "status": { "sp": 18, "text": "死亡(アスラ政変)" },
+      "notes": []
+    },
+    {
+      "id": "gal-farion",
+      "name": "ガル・ファリオン",
+      "kana": "がる・ふぁりおん",
+      "group": "power",
+      "race": "human",
+      "sp": 6,
+      "portrait": true,
+      "birth": null,
+      "bio": "剣神流の総本山・剣の聖地に君臨する「剣神」。豪放な武人で、強い剣士を育て、強い相手と斬り結ぶことに執心する。",
+      "tiers": [
+        { "label": "剣神流(剣神)", "tier": "神級", "sp": 6 }
+      ],
+      "status": { "sp": 18, "text": "死亡(アスラ政変)" },
+      "notes": [
+        { "sp": 16, "text": "剣の聖地でエリスを剣王へと鍛え上げた張本人。" }
+      ]
+    },
+    {
+      "id": "perugius",
+      "name": "ペルギウス・ドーラ",
+      "kana": "ぺるぎうす・どーら",
+      "group": "power",
+      "race": "human",
+      "sp": 15,
+      "portrait": true,
+      "birth": null,
+      "ageNote": "400歳超",
+      "bio": "四百年前にラプラスを封じた三英雄の一人「甲龍王」。空中城塞ケイオスブレイカーの主で、十二の召喚精霊を従える。誇り高く、美意識に厳しい。",
+      "notes": []
+    },
+    {
+      "id": "atofe",
+      "name": "アトーフェラトーフェ・ライバック",
+      "kana": "あとーふぇらとーふぇ・らいばっく",
+      "group": "power",
+      "race": "demon",
+      "sp": 19,
+      "portrait": true,
+      "birth": null,
+      "ageNote": "不死身ゆえ不詳",
+      "bio": "三大魔王に数えられる不死魔王。理屈より拳が先に出る豪傑で、配下に課す「試練」はもはや天災。アレクサンダーの縁者でもある。",
+      "notes": []
+    },
+    {
+      "id": "laplace",
+      "name": "ラプラス",
+      "kana": "らぷらす",
+      "group": "power",
+      "race": "demon",
+      "sp": 3,
+      "portrait": false,
+      "birth": null,
+      "ageNote": "伝説上の存在",
+      "bio": "約四百年前の大戦を引き起こした魔神。三英雄に敗れて封印されたが、いずれ復活すると予言されており、歴史のそこかしこに影を落とす。",
+      "notes": []
     },
     {
       "id": "hitogami",

@@ -25,7 +25,15 @@
     { "id": "orsted", "x": 1060, "y": 400 },
     { "id": "hitogami", "x": 1080, "y": 180 },
     { "id": "kishirika", "x": 1040, "y": 840 },
-    { "id": "badigadi", "x": 860, "y": 850 }
+    { "id": "badigadi", "x": 860, "y": 850 },
+    { "id": "philip", "x": 200, "y": 170 },
+    { "id": "sauros", "x": 80, "y": 250 },
+    { "id": "elinalise", "x": 90, "y": 700 },
+    { "id": "ariel", "x": 60, "y": 420 },
+    { "id": "luke", "x": 60, "y": 300 },
+    { "id": "geese", "x": 600, "y": 850 },
+    { "id": "perugius", "x": 1150, "y": 520 },
+    { "id": "gal-farion", "x": 1120, "y": 660 }
   ],
   "edges": [
     { "a": "rudeus", "b": "paul", "type": "family", "label": "父子", "sp": 1 },
@@ -57,6 +65,21 @@
     { "a": "hitogami", "b": "rudeus", "type": "rival", "label": "宿敵", "sp": 16 },
     { "a": "kishirika", "b": "rudeus", "type": "watch", "label": "魔眼を授ける", "sp": 4 },
     { "a": "kishirika", "b": "badigadi", "type": "love", "label": "婚約者", "sp": 5 },
-    { "a": "orsted", "b": "nanahoshi", "type": "ally", "label": "旅の同行者", "sp": 6 }
+    { "a": "orsted", "b": "nanahoshi", "type": "ally", "label": "旅の同行者", "sp": 6 },
+    { "a": "philip", "b": "eris", "type": "family", "label": "父娘", "sp": 2 },
+    { "a": "sauros", "b": "eris", "type": "family", "label": "祖父と孫", "sp": 2 },
+    { "a": "sauros", "b": "philip", "type": "family", "label": "親子", "sp": 2 },
+    { "a": "philip", "b": "rudeus", "type": "ally", "label": "家庭教師として雇う", "sp": 2 },
+    { "a": "elinalise", "b": "paul", "type": "ally", "label": "元パーティ", "sp": 4 },
+    { "a": "elinalise", "b": "cliff", "type": "love", "label": "恋人→夫婦", "sp": 9 },
+    { "a": "geese", "b": "paul", "type": "ally", "label": "悪友", "sp": 4 },
+    { "a": "geese", "b": "hitogami", "type": "watch", "label": "使徒", "sp": 22 },
+    { "a": "ariel", "b": "luke", "type": "ally", "label": "主従", "sp": 7 },
+    { "a": "ariel", "b": "sylphy", "type": "ally", "label": "主従(フィッツとして)", "sp": 9 },
+    { "a": "ariel", "b": "rudeus", "type": "ally", "label": "政変の協力者", "sp": 17 },
+    { "a": "perugius", "b": "orsted", "type": "ally", "label": "盟友", "sp": 15 },
+    { "a": "perugius", "b": "nanahoshi", "type": "ally", "label": "庇護", "sp": 15 },
+    { "a": "gal-farion", "b": "eris", "type": "mentor", "label": "剣王へ鍛える", "sp": 16 },
+    { "a": "gal-farion", "b": "rudeus", "type": "rival", "label": "政変で対峙", "sp": 18 }
   ]
 }

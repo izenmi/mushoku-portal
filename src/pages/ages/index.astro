@@ -1,0 +1,94 @@
+---
+import Base from '../../layouts/Base.astro';
+import Portrait from '../../components/Portrait.astro';
+import data from '../../data/characters.json';
+import timeline from '../../data/timeline.json';
+
+const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.label ?? '';
+const base = import.meta.env.BASE_URL;
+
+// 生年(甲龍暦)が分かる人物だけを対象にする
+const people = (data.characters as any[])
+  .filter((s) => s.birth)
+  .map((s) => ({ id: s.id, name: s.name, birth: s.birth, est: !!s.birthEst, sp: s.sp, portrait: s.portrait, race: s.race }))
+  .sort((a, b) => a.birth - b.birth);
+---
+
+<Base title="年齢早見表" description="甲龍暦スライダーで各キャラクターの年齢を確認。ルーデウス誕生から物語の終わりまで。">
+  <h1>📅 年齢早見表</h1>
+  <p class="muted">
+    スライダーで甲龍暦を動かすと、各人物のその年の年齢が表示されます。
+    ルーデウスは甲龍暦407年生まれ。転移事件は417年です。生年が明示されない人物は概算(※)です。
+  </p>
+
+  <div class="card year-ctl">
+    <div class="year-row">
+      <span class="year-label">甲龍暦 <b id="year-val">417</b> 年</span>
+      <span id="year-note" class="muted"></span>
+    </div>
+    <input id="year" type="range" min="405" max="432" value="417" step="1" />
+  </div>
+
+  <div class="grid age-grid" data-sp-count>
+    <p class="sp-note"></p>
+    {people.map((p) => (
+      <a
+        href={`${base}characters/${p.id}/`}
+        class="card age-card"
+        data-birth={p.birth}
+        data-sp={p.sp > 1 ? p.sp : undefined}
+        data-sp-hide={p.sp > 1 ? '' : undefined}
+        data-sp-label={spLabel(p.sp)}
+      >
+        <Portrait id={p.portrait ? p.id : `sil-${p.id}`} size={56} classKey={p.race} />
+        <div class="age-meta">
+          <strong>{p.name}</strong>
+          <span class="age-val muted" data-est={p.est ? '1' : undefined}>—</span>
+        </div>
+      </a>
+    ))}
+  </div>
+  <p class="muted" style="font-size: 0.78rem;">※印は作中描写からの概算生年です。読了位置より先に登場する人物は表示されません。</p>
+
+  <script is:inline>
+    const slider = document.getElementById('year');
+    const val = document.getElementById('year-val');
+    const note = document.getElementById('year-note');
+    const NOTES = {
+      407: 'ルーデウス誕生',
+      417: 'フィットア領転移事件',
+      420: 'ルーデウス、フィットア領跡へ帰郷',
+      423: 'ラノア魔法大学の時代',
+    };
+    const render = () => {
+      const y = Number(slider.value);
+      val.textContent = String(y);
+      note.textContent = NOTES[y] ?? '';
+      document.querySelectorAll('.age-card').forEach((card) => {
+        const birth = Number(card.dataset.birth);
+        const el = card.querySelector('.age-val');
+        const est = el.dataset.est ? '※' : '';
+        el.textContent = y < birth ? '(誕生前)' : `${y - birth}歳${est}`;
+      });
+    };
+    slider.addEventListener('input', render);
+    window.addEventListener('DOMContentLoaded', render);
+    document.addEventListener('mushoku:progress', render);
+  </script>
+
+  <style>
+    .year-ctl { padding: 14px 18px; margin-top: 14px; }
+    .year-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+    .year-label { font-size: 1.05rem; }
+    .year-label b { color: var(--accent); font-size: 1.3rem; }
+    #year { width: 100%; margin-top: 8px; accent-color: var(--accent); }
+    .age-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); margin-top: 14px; }
+    .age-card {
+      display: flex; gap: 10px; align-items: center; padding: 10px 12px; text-decoration: none;
+    }
+    .age-card:hover { border-color: var(--accent); }
+    .age-meta { display: flex; flex-direction: column; line-height: 1.35; }
+    .age-meta strong { font-size: 0.92rem; }
+    .age-val { font-size: 0.85rem; }
+  </style>
+</Base>

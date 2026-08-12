@@ -1,35 +1,21 @@
 ---
 import Base from '../../layouts/Base.astro';
-import data from '../../data/students.json';
+import data from '../../data/characters.json';
 
-const ERA_LABEL: Record<string, [string, number]> = {
-  y2: ['2年生編開始時点', 15],
-  y3: ['3年生編開始時点', 30],
-  est: ['管理人推定', 1],
-  true: ['真の実力', 8],
-};
-
+// chart(時点別スナップショット)を持つ人物だけが比較対象
 const vsData: Record<string, any> = {};
-for (const s of data.students as any[]) {
-  const opts: any[] = [];
-  if (s.oaaHist) {
-    for (const h of s.oaaHist) {
-      const key = h.sp === 15 ? 'y2' : 'y3';
-      opts.push({ key, label: ERA_LABEL[key][0], sp: ERA_LABEL[key][1], stats: h });
-    }
-  } else if (s.oaa) {
-    opts.push({ key: 'est', label: 'OAA(推定)', sp: 1, stats: s.oaa });
-  }
-  if (s.oaaTrue) opts.push({ key: 'true', label: '真の実力', sp: 8, stats: s.oaaTrue });
-  if (opts.length) vsData[s.id] = { name: s.name, cls: s.class, opts };
+for (const s of data.characters as any[]) {
+  if (!s.chart || s.chart.length === 0) continue;
+  const opts = s.chart.map((h: any, i: number) => ({ key: `e${i}`, label: h.era, sp: h.sp, stats: h }));
+  vsData[s.id] = { name: s.name, opts };
 }
 const ids = Object.keys(vsData);
 ---
 
-<Base title="VS比較" description="2人のOAAレーダーチャートを重ねて比較。時点切替・比較URLのシェア対応。">
+<Base title="VS比較" description="2人の能力チャートを重ねて比較。時点切替・比較URLのシェア対応。">
   <h1>⚔️ VS比較</h1>
   <p class="muted">
-    2人を選ぶとOAAレーダーチャートが重なって表示されます。時点(2年生編/3年生編)の切り替えや、
+    2人を選ぶと能力チャート(管理人推定)が重なって表示されます。時点の切り替えや、
     同一人物の2時点比較(成長の可視化)もできます。
   </p>
 
@@ -48,7 +34,7 @@ const ids = Object.keys(vsData);
   </div>
 
   <div class="card panel">
-    <svg id="vs-chart" viewBox="-40 -6 380 250" width="480" role="img" aria-label="OAA比較レーダー"></svg>
+    <svg id="vs-chart" viewBox="-40 -6 380 250" width="480" role="img" aria-label="能力比較レーダー"></svg>
     <div id="vs-table"></div>
     <div class="end-actions" style="margin-top: 12px;">
       <button id="vs-copy" class="share-btn">比較URLをコピー</button>
@@ -58,12 +44,12 @@ const ids = Object.keys(vsData);
 
   <script is:inline define:vars={{ vsData }}>
     const NS = 'http://www.w3.org/2000/svg';
-    const AXES = [['academic', '学力'], ['physical', '身体能力'], ['adapt', '機転思考力'], ['social', '社会貢献性']];
-    const COLORS = { a: 'var(--accent)', b: '#3b82f6' };
-    const state = { a: 'ayanokoji', b: 'sakayanagi', ea: null, eb: null };
+    const AXES = [['magic', '魔術'], ['sword', '剣・武技'], ['combat', '体術・実戦'], ['wits', '知略']];
+    const COLORS = { a: 'var(--accent)', b: '#2f6fb0' };
+    const state = { a: 'rudeus', b: 'eris', ea: null, eb: null };
 
-    const progress = () => (window.ANHS ? window.ANHS.progress : 0);
-    const usable = (opt) => opt.sp <= Math.max(progress(), 1) || opt.sp === 15; // 2年時点は常時OK
+    const progress = () => (window.MUSHOKU ? window.MUSHOKU.progress : 0);
+    const usable = (opt) => opt.sp <= Math.max(progress(), 6); // 少年期時点(〜6巻)は常時OK
 
     const params = new URLSearchParams(location.search);
     if (params.get('a') && vsData[params.get('a')]) state.a = params.get('a');
@@ -136,15 +122,21 @@ const ids = Object.keys(vsData);
         const pts = AXES.map(([key], i) => pt(i, Math.max(0.04, (stats[key]?.[1] ?? 0) / 100)));
         el('polygon', {
           points: pts.map((p) => p.map((v) => v.toFixed(1)).join(',')).join(' '),
-          fill: side === 'a' ? 'rgb(179 34 60 / 0.25)' : 'rgb(59 130 246 / 0.25)',
+          fill: side === 'a' ? 'rgb(23 126 96 / 0.25)' : 'rgb(47 111 176 / 0.25)',
           stroke: COLORS[side], 'stroke-width': 2.4, 'stroke-linejoin': 'round',
         }, svg);
         pts.forEach((p) => el('circle', { cx: p[0], cy: p[1], r: 3, fill: COLORS[side] }, svg));
       }
     };
 
-    const gradeCell = (stats, key) =>
-      stats[key] ? `<b class="rank" data-rank="${stats[key][0]}">${stats[key][0]}</b> <span class="muted">(${stats[key][1]})</span>` : '—';
+    const gradeCell = (stats, key) => {
+      if (!stats[key]) return '—';
+      const [grade, score] = stats[key];
+      const badge = grade.includes('級')
+        ? `<b class="tier" data-tier="${grade.replace(/\(.+\)/, '')}">${grade}</b>`
+        : `<b class="rank" data-rank="${grade}">${grade}</b>`;
+      return `${badge} <span class="muted">(${score})</span>`;
+    };
 
     const render = () => {
       const ea = renderEraChips('a');
@@ -153,7 +145,7 @@ const ids = Object.keys(vsData);
       document.getElementById('vs-sel-a').value = state.a;
       document.getElementById('vs-sel-b').value = state.b;
       drawChart(ea.stats, eb.stats);
-      const rows = [...AXES, ['overall', '総合']]
+      const rows = AXES
         .map(([key, label]) => `<tr><td class="vs-cell-a">${gradeCell(ea.stats, key)}</td><th>${label}</th><td class="vs-cell-b">${gradeCell(eb.stats, key)}</td></tr>`)
         .join('');
       document.getElementById('vs-table').innerHTML = `
@@ -161,14 +153,14 @@ const ids = Object.keys(vsData);
           <tr>
             <td class="vs-head" style="color: var(--accent)">${da.name}<br><small class="muted">${ea.label}</small></td>
             <th></th>
-            <td class="vs-head" style="color: #3b82f6">${db.name}<br><small class="muted">${eb.label}</small></td>
+            <td class="vs-head" style="color: #2f6fb0">${db.name}<br><small class="muted">${eb.label}</small></td>
           </tr>
           ${rows}
         </table>`;
       const url = new URL(location.href);
       url.search = `?a=${state.a}&b=${state.b}&ea=${ea.key}&eb=${eb.key}`;
       history.replaceState(null, '', url);
-      const text = `${da.name}(${ea.label}) vs ${db.name}(${eb.label}) をOAAで比較! #よう実 #高育ポータル`;
+      const text = `${da.name}(${ea.label}) vs ${db.name}(${eb.label}) を能力チャートで比較! #無職転生`;
       document.getElementById('vs-share').href =
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url.href)}`;
     };
@@ -185,7 +177,7 @@ const ids = Object.keys(vsData);
       document.getElementById('vs-copy').textContent = 'コピーしました!';
       setTimeout(() => (document.getElementById('vs-copy').textContent = '比較URLをコピー'), 1500);
     });
-    document.addEventListener('anhs:progress', render);
+    document.addEventListener('mushoku:progress', render);
     window.addEventListener('DOMContentLoaded', render);
   </script>
 
@@ -195,7 +187,7 @@ const ids = Object.keys(vsData);
     .vs-side { display: flex; flex-direction: column; gap: 8px; }
     .vs-side { border-left: 4px solid var(--line); padding-left: 12px; }
     .vs-side-a { border-color: var(--accent); }
-    .vs-side-b { border-color: #3b82f6; }
+    .vs-side-b { border-color: #2f6fb0; }
     .vs-dot { display: none; }
     .vs-select {
       padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line);
