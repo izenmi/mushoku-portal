@@ -1,30 +1,30 @@
 ---
 import Base from '../../layouts/Base.astro';
-import points from '../../data/points.json';
+import growth from '../../data/growth.json';
 import timeline from '../../data/timeline.json';
 
-const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.label ?? '入学時';
+const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.label ?? '物語開始時';
 ---
 
-<Base title="クラスポイント推移" description="A〜Dクラスのクラスポイント変動を折れ線グラフで辿る。読了位置より先は自動でマスク。">
-  <h1>📈 クラスポイント推移</h1>
+<Base title="ルーデウス成長記録" description="ルーデウスの魔術・剣術・人脈・資産の歩みを折れ線グラフで辿る。読了位置より先は自動でマスク。">
+  <h1>📈 ルーデウス成長記録</h1>
   <p class="muted">
-    入学時クラス基準の4系列。数値はファンコミュニティの検証値を基にした概算です。
+    主人公ルーデウスの歩みを4系列の指数(0-100・管理人の相対評価)で表したグラフです。
     読了位置(右上📖)より先の推移は「???」でマスクされます。
   </p>
 
   <div class="card chart-card">
     <div id="legend" class="legend"></div>
-    <svg id="chart" viewBox="0 0 760 420" role="img" aria-label="クラスポイント推移グラフ"></svg>
+    <svg id="chart" viewBox="0 0 760 420" role="img" aria-label="ルーデウス成長グラフ"></svg>
     <p id="chart-empty" class="muted" hidden>表示できる期間がありません。右上の📖から読了位置を設定してください。</p>
   </div>
 
   <section>
-    <h2 class="section-title">主な変動イベント</h2>
+    <h2 class="section-title">主な節目</h2>
     <div data-sp-count>
       <p class="sp-note"></p>
       <ul class="events">
-        {points.points.filter((p) => 'event' in p && p.event).map((p) => (
+        {growth.points.filter((p) => 'event' in p && p.event).map((p) => (
           <li class="card event-item" data-sp={p.ord > 1 ? p.ord : undefined} data-sp-label={spLabel(p.ord)}>
             <span class="event-vol">{p.label}</span>
             <span>{p.event}</span>
@@ -32,16 +32,16 @@ const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.labe
         ))}
       </ul>
     </div>
-    <p class="muted" style="font-size: 0.82rem;">{points.future_note}</p>
+    <p class="muted" style="font-size: 0.82rem;">{growth.future_note}</p>
   </section>
 
-  <script is:inline define:vars={{ data: points }}>
+  <script is:inline define:vars={{ data: growth }}>
     const svg = document.getElementById('chart');
     const legend = document.getElementById('legend');
     const empty = document.getElementById('chart-empty');
     const NS = 'http://www.w3.org/2000/svg';
     const W = 760, H = 420, L = 52, R = 16, T = 18, B = 44;
-    const MAXY = 1300;
+    const MAXY = 100;
 
     const el = (tag, attrs, parent) => {
       const n = document.createElementNS(NS, tag);
@@ -55,7 +55,7 @@ const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.labe
       .join('');
 
     const draw = () => {
-      const progress = window.ANHS ? window.ANHS.progress : 999;
+      const progress = window.MUSHOKU ? window.MUSHOKU.progress : 999;
       svg.innerHTML = '';
       const pts = data.points.filter((p) => p.ord <= progress);
       const masked = data.points.length - pts.length;
@@ -68,7 +68,7 @@ const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.labe
       const y = (v) => T + (H - T - B) * (1 - v / MAXY);
 
       // グリッドと目盛り
-      for (let v = 0; v <= MAXY; v += 250) {
+      for (let v = 0; v <= MAXY; v += 25) {
         el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: 'var(--line)', 'stroke-width': v === 0 ? 1.6 : 1 });
         el('text', { x: L - 8, y: y(v) + 4, 'text-anchor': 'end', 'font-size': 11, fill: 'var(--ink-2)' }).textContent = String(v);
       }
@@ -100,13 +100,13 @@ const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.labe
         pts.forEach((p) => {
           const c = el('circle', { cx: x(p.ord), cy: y(p[s.key]), r: 3.4, fill: s.color });
           const tip = document.createElementNS(NS, 'title');
-          tip.textContent = `${p.label} ${s.label}: ${p[s.key]}cp${p.event ? `\n${p.event}` : ''}`;
+          tip.textContent = `${p.label} ${s.label}: ${p[s.key]}${p.event ? `\n${p.event}` : ''}`;
           c.appendChild(tip);
         });
       });
     };
 
-    document.addEventListener('anhs:progress', draw);
+    document.addEventListener('mushoku:progress', draw);
     window.addEventListener('DOMContentLoaded', draw);
   </script>
 

@@ -1,48 +1,51 @@
 ---
 import Base from '../../layouts/Base.astro';
-import exams from '../../data/exams.json';
-import points from '../../data/points.json';
-import students from '../../data/students.json';
+import battles from '../../data/battles.json';
+import growth from '../../data/growth.json';
+import chars from '../../data/characters.json';
 import tl from '../../data/timeline.json';
 
 const base = import.meta.env.BASE_URL;
 const volLabel = (ord: number) => tl.volumes.find((v) => v.ord === ord)?.label ?? '';
 
 type Item = {
-  ord: number; type: 'exam' | 'points' | 'exit';
+  ord: number; type: 'battle' | 'growth' | 'exit';
   icon: string; typeLabel: string; title: string; text?: string; href?: string;
 };
 
 const items: Item[] = [
-  ...exams.map((e) => ({
-    ord: e.sp, type: 'exam' as const, icon: '📋', typeLabel: '特別試験',
-    title: e.name, text: e.season, href: `${base}exams/${e.id}/`,
+  ...battles.map((e) => ({
+    ord: e.sp, type: 'battle' as const, icon: '🛡️', typeLabel: '戦い・事件',
+    title: e.name, text: e.place, href: `${base}battles/${e.id}/`,
   })),
-  ...points.points
-    .filter((p) => 'event' in p && p.event && p.ord > 0)
+  ...growth.points
+    .filter((p) => 'event' in p && p.event && p.ord > 1)
     .map((p) => ({
-      ord: p.ord, type: 'points' as const, icon: '📈', typeLabel: 'クラスポイント',
+      ord: p.ord, type: 'growth' as const, icon: '📈', typeLabel: 'ルーデウスの節目',
       title: p.label, text: p.event as string,
     })),
-  ...(students.students as any[])
+  ...(chars.characters as any[])
     .filter((s) => s.status)
     .map((s) => ({
-      ord: s.status.sp, type: 'exit' as const, icon: '⚠️', typeLabel: '退学',
-      title: `${s.name} ${s.status.text}`, href: `${base}students/${s.id}/`,
+      ord: s.status.sp, type: 'exit' as const, icon: '⚠️', typeLabel: '訃報・異変',
+      title: `${s.name} — ${s.status.text}`, href: `${base}characters/${s.id}/`,
     })),
 ].sort((a, b) => a.ord - b.ord);
 
 const arcs = [
-  { start: 1, end: 14, label: '1年生編' },
-  { start: 15, end: 29, label: '2年生編' },
-  { start: 30, end: 99, label: '3年生編' },
+  { start: 1, end: 2, label: '幼年期・少年期' },
+  { start: 3, end: 6, label: '魔大陸・帰還編' },
+  { start: 7, end: 12, label: '魔法大学編' },
+  { start: 13, end: 16, label: '青年期・転換点' },
+  { start: 17, end: 23, label: '青年期後半' },
+  { start: 24, end: 99, label: '決戦・完結編' },
 ];
 ---
 
-<Base title="統合年表" description="特別試験・クラスポイント変動・退学者を1本の年表で。読了位置マーカー付き。">
-  <h1>📜 統合年表</h1>
+<Base title="甲龍暦年表" description="戦い・事件、ルーデウスの節目、訃報を1本の年表で。読了位置マーカー付き。">
+  <h1>📜 甲龍暦年表</h1>
   <p class="muted">
-    特別試験・クラスポイントの変動・退学者を時系列で1本にまとめました。
+    主要な戦い・事件、ルーデウスの節目、人物の訃報・異変を時系列で1本にまとめました。
     「📖 ここまで読了」のラインが、あなたの読了位置(右上📖)に合わせて動きます。
   </p>
 
@@ -53,7 +56,7 @@ const arcs = [
         {items.filter((i) => i.ord >= arc.start && i.ord <= arc.end).map((i) => (
           <div class="tl-item" data-ord={i.ord}>
             <div class="tl-marker">
-              <span class="vol-badge">{volLabel(i.ord).replace(/(1年生編|2年生編|3年生編)/, '').replace(/\(.+\)/, '') || '—'}</span>
+              <span class="vol-badge">{tl.volumes.find((v) => v.ord === i.ord)?.vol ?? '—'}巻</span>
             </div>
             <div
               class={`card tl-card tl-${i.type}`}
@@ -76,7 +79,7 @@ const arcs = [
     marker.className = 'tl-readline';
     marker.innerHTML = '<span>📖 ここまで読了</span>';
     const place = () => {
-      const p = (window as any).ANHS ? (window as any).ANHS.progress : 0;
+      const p = (window as any).MUSHOKU ? (window as any).MUSHOKU.progress : 0;
       const rows = [...document.querySelectorAll<HTMLElement>('.tl-item')];
       let last: HTMLElement | null = null;
       for (const r of rows) {
@@ -85,7 +88,7 @@ const arcs = [
       if (last) last.after(marker);
       else rows[0]?.before(marker);
     };
-    document.addEventListener('anhs:progress', place);
+    document.addEventListener('mushoku:progress', place);
     window.addEventListener('DOMContentLoaded', place);
   </script>
 
@@ -105,8 +108,8 @@ const arcs = [
       font-size: 0.7rem; font-weight: 700; border-radius: 999px; padding: 3px 8px;
     }
     .tl-card { padding: 10px 16px; }
-    .tl-exam { border-left: 4px solid var(--accent); }
-    .tl-points { border-left: 4px solid #3b82f6; }
+    .tl-battle { border-left: 4px solid var(--accent); }
+    .tl-growth { border-left: 4px solid #2f6fb0; }
     .tl-exit { border-left: 4px solid #b78a1e; }
     .tl-type { font-size: 0.7rem; font-weight: 700; color: var(--ink-2); display: block; }
     .tl-title { font-weight: 700; text-decoration: none; font-size: 0.95rem; }

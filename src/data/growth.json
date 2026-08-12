@@ -1,0 +1,24 @@
+{
+  "note": "ルーデウスの歩みを4系列(0-100の指数)で表した管理人推定のグラフ。数値は作中描写の相対評価であり、公式設定ではない。",
+  "series": [
+    { "key": "magic", "label": "魔術", "color": "#177e60" },
+    { "key": "sword", "label": "剣・武技", "color": "#c22843" },
+    { "key": "fame", "label": "人脈・名声", "color": "#2f6fb0" },
+    { "key": "wealth", "label": "資産・地位", "color": "#a16207" }
+  ],
+  "points": [
+    { "ord": 1, "label": "幼年期(〜7歳)", "magic": 40, "sword": 10, "fame": 5, "wealth": 5, "event": "5歳で水聖級魔術を披露し、ロキシーから聖級の認定を受ける" },
+    { "ord": 2, "label": "家庭教師時代", "magic": 45, "sword": 25, "fame": 10, "wealth": 12, "event": "ボレアス家の家庭教師として働き、ギレーヌに剣神流を学ぶ" },
+    { "ord": 3, "label": "魔大陸転移直後", "magic": 50, "sword": 28, "fame": 12, "wealth": 2, "event": "転移事件で無一文に。冒険者「デッドエンド」として再出発" },
+    { "ord": 4, "label": "魔大陸横断", "magic": 54, "sword": 32, "fame": 22, "wealth": 12, "event": "「泥沼のルーデウス」の二つ名と予見眼を得る" },
+    { "ord": 6, "label": "帰郷", "magic": 58, "sword": 38, "fame": 26, "wealth": 20, "event": "オルステッド戦を生き延び、フィットア領跡へ帰り着く" },
+    { "ord": 7, "label": "魔法大学入学", "magic": 62, "sword": 40, "fame": 34, "wealth": 26, "event": "特別生として入学。研究仲間と人脈が一気に広がる" },
+    { "ord": 10, "label": "結婚", "magic": 66, "sword": 42, "fame": 40, "wealth": 38, "event": "シルフィエットと結婚し、シャリーアに新居を構える" },
+    { "ord": 13, "label": "迷宮攻略後", "magic": 72, "sword": 46, "fame": 46, "wealth": 42, "event": "転移迷宮を生還。大きな喪失と、二人目の妻" },
+    { "ord": 16, "label": "龍神配下", "magic": 80, "sword": 50, "fame": 52, "wealth": 45, "event": "オルステッドの配下となり、魔導鎧など装備も強化" },
+    { "ord": 18, "label": "アスラ政変後", "magic": 84, "sword": 54, "fame": 72, "wealth": 68, "event": "政変の立役者として大国に人脈を築き、事業も拡大" },
+    { "ord": 22, "label": "使徒との攻防", "magic": 88, "sword": 57, "fame": 84, "wealth": 82, "event": "各地の戦いを重ね、組織と家族を守り抜く" },
+    { "ord": 26, "label": "完結時点", "magic": 92, "sword": 60, "fame": 95, "wealth": 90, "event": "人神との決着。世界中に轍を残した生涯" }
+  ],
+  "future_note": "数値はすべて管理人の相対評価です(公式値ではありません)。蛇足編の範囲は収録していません。"
+}

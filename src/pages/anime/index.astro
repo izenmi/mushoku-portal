@@ -3,10 +3,10 @@ import Base from '../../layouts/Base.astro';
 import anime from '../../data/anime.json';
 ---
 
-<Base title="アニメ⇔原作対応表" description="TVアニメ全4期と原作巻の対応表。アニメの続きはこの巻から。">
+<Base title="アニメ⇔原作対応表" description="TVアニメ全3期と書籍版の対応表。アニメの続きはこの巻から。">
   <h1>📺 アニメ⇔原作対応表</h1>
   <p class="muted">
-    TVアニメ各期が原作のどこに対応するかをまとめました。
+    TVアニメ各期が書籍版のどこに対応するかをまとめました。
     「この期まで見た」ボタンを押すと、サイト全体のネタバレ表示があなたの視聴位置に合わせて設定されます。
   </p>
 
@@ -25,7 +25,7 @@ import anime from '../../data/anime.json';
       ))}
     </div>
     <p class="muted" style="font-size: 0.82rem;">
-      ✨ {anime.next_season}も発表済み。放送中の期の対応巻は暫定です。
+      ✨ {anime.next_season}。放送中の期の対応巻は暫定です。
     </p>
   </section>
 
@@ -36,27 +36,31 @@ import anime from '../../data/anime.json';
         <small class="muted">{s.year} / {s.count} / 原作: {s.novelRange}</small>
         {'airing' in s && s.airing && <span class="an-airing">放送中</span>}
       </h2>
-      <div class="card an-table-wrap">
-        <table class="an-table">
-          <thead><tr><th>話数</th><th>サブタイトル</th></tr></thead>
-          <tbody>
-            {s.episodes.map((e) => (
-              <tr><td class="an-num">第{e.num}話</td><td>{e.title}</td></tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {s.episodes.length > 0 ? (
+        <div class="card an-table-wrap">
+          <table class="an-table">
+            <thead><tr><th>話数</th><th>サブタイトル</th></tr></thead>
+            <tbody>
+              {s.episodes.map((e: any) => (
+                <tr><td class="an-num">第{e.num}話</td><td>{e.title}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="muted" style="font-size: 0.85rem;">各話サブタイトルは順次追加予定です。</p>
+      )}
     </section>
   ))}
 
   <p class="muted" style="font-size: 0.78rem;">
-    出典: Wikipedia「ようこそ実力至上主義の教室へのアニメエピソード一覧」および TVアニメ公式サイト STORY ページ。
+    出典: TVアニメ『無職転生』公式サイトおよびWikipedia。話数と巻の対応は目安です。
   </p>
 
   <script>
     document.querySelectorAll<HTMLElement>('.an-set').forEach((b) => {
       b.addEventListener('click', () => {
-        localStorage.setItem('anhs-progress', b.dataset.ord!);
+        localStorage.setItem('mushoku-progress', b.dataset.ord!);
         location.reload();
       });
     });

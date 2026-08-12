@@ -1,32 +1,32 @@
 ---
 import Base from '../../layouts/Base.astro';
-import exams from '../../data/exams.json';
+import battles from '../../data/battles.json';
 
 const base = import.meta.env.BASE_URL;
-const arcs = ['1年生編', '2年生編', '3年生編'];
+const arcs = ['幼年期・少年期', '魔大陸・帰還編', '魔法大学編', '青年期・転換点', '青年期後半', '決戦・完結編'];
 ---
 
-<Base title="特別試験アーカイブ" description="歴代特別試験のルール・結果・退学者を年表形式で整理。ネタバレは読了位置に応じて自動で隠されます。">
-  <h1>📋 特別試験アーカイブ</h1>
-  <p class="muted">高度育成高等学校で行われた特別試験・主要イベントの記録。読了位置(右上📖)より先の試験は内容を伏せています。</p>
+<Base title="戦い・事件の記録" description="無職転生の主要な戦い・事件のあらましと結末を年表形式で整理。ネタバレは読了位置に応じて自動で隠されます。">
+  <h1>🛡️ 戦い・事件の記録</h1>
+  <p class="muted">物語を動かした主要な戦い・事件のアーカイブ。読了位置(右上📖)より先の出来事は内容を伏せています。</p>
 
   {arcs.map((arc) => (
     <section>
       <h2 class="section-title">{arc}</h2>
       <div class="timeline" data-sp-count>
         <p class="sp-note"></p>
-        {exams.filter((e) => e.arc === arc).map((e) => (
+        {battles.filter((e) => e.arc === arc).map((e) => (
           <div class="timeline-item" data-sp={e.sp > 1 ? e.sp : undefined}>
             <div class="timeline-marker">
               <span class="vol-badge">{e.vol}巻</span>
             </div>
-            <a href={`${base}exams/${e.id}/`} class="card exam-card">
-              <div class="exam-head">
+            <a href={`${base}battles/${e.id}/`} class="card battle-card">
+              <div class="battle-head">
                 <strong>{e.name}</strong>
                 <span class="type-tag">{e.type}</span>
               </div>
-              <p class="muted exam-season">{e.season}</p>
-              <p class="exam-rule">{e.rule.length > 90 ? e.rule.slice(0, 90) + '…' : e.rule}</p>
+              <p class="muted battle-place">{e.place}</p>
+              <p class="battle-rule">{e.rule.length > 90 ? e.rule.slice(0, 90) + '…' : e.rule}</p>
             </a>
           </div>
         ))}
@@ -61,16 +61,16 @@ const arcs = ['1年生編', '2年生編', '3年生編'];
       font-size: 0.72rem; font-weight: 700;
       border-radius: 999px; padding: 3px 8px;
     }
-    .exam-card { display: block; padding: 14px 16px; text-decoration: none; }
-    .exam-card:hover { border-color: var(--accent); }
-    .exam-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .exam-head strong { font-size: 1.02rem; }
+    .battle-card { display: block; padding: 14px 16px; text-decoration: none; }
+    .battle-card:hover { border-color: var(--accent); }
+    .battle-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .battle-head strong { font-size: 1.02rem; }
     .type-tag {
       font-size: 0.72rem; font-weight: 700;
       background: var(--accent-soft); color: var(--accent);
       border-radius: 6px; padding: 2px 8px;
     }
-    .exam-season { font-size: 0.8rem; margin: 4px 0; }
-    .exam-rule { font-size: 0.88rem; margin: 0; color: var(--ink-2); }
+    .battle-place { font-size: 0.8rem; margin: 4px 0; }
+    .battle-rule { font-size: 0.88rem; margin: 0; color: var(--ink-2); }
   </style>
 </Base>
