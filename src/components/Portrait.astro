@@ -1,95 +1,72 @@
 ---
 // パラメータ式のキャラポートレート(全て自作SVG)。
-// 性別で顔立ち・体格・制服を、髪型パーツでキャラを描き分ける。
+// 性別で顔立ちを、髪型パーツ・種族パーツ(耳・宝石など)でキャラを描き分ける。
 interface Props {
   id: string;
   size?: number;
-  classKey?: string | null; // A/B/C/D → 背景色
+  classKey?: string | null; // 種族キー(human/superd/...) → 背景色
 }
 
 type Cfg = {
   gender: 'm' | 'f';
   front: 'flat' | 'side' | 'curtain' | 'messy' | 'neat' | 'spiky' | 'slick' | 'hime' | 'buzz' | 'none';
-  back: 'short-m' | 'mid' | 'bob' | 'long' | 'wavy' | 'ponytail' | 'twin' | 'buns' | 'mane' | 'topknot' | 'none';
+  back: 'short-m' | 'mid' | 'bob' | 'long' | 'wavy' | 'ponytail' | 'twin' | 'buns' | 'mane' | 'topknot' | 'braid' | 'none';
   hair: string;
   eyes: string;
   expr: 'neutral' | 'smile' | 'smirk' | 'shy' | 'fierce' | 'soft';
   glasses?: boolean;
-  beret?: boolean;   // ベレー帽(坂柳)
   ribbon?: string;   // 髪飾り
-  jacket?: string;   // 制服上着の上書き(教師など)
-  noBow?: boolean;   // 女子の襟リボンを外す(教師など)
-  collar?: 'open';   // 男子: ネクタイなしの開襟(龍園・宝泉・石崎)
-  skin?: string;     // 肌色の上書き(日焼け等)
-  sunglasses?: boolean; // サングラス(山田アルベルト)
-  hairband?: string; // カチューシャ/ヘアバンド(柴田)
+  jacket?: string;   // 上着(ローブ・旅装)の色の上書き
+  skin?: string;     // 肌色の上書き(褐色・魔族など)
+  ears?: 'elf' | 'beast'; // エルフの長耳 / 獣族のけもの耳
+  gem?: boolean;     // 額の宝石(スペルド族)
+  eyepatch?: boolean; // 眼帯(ギレーヌ)
+  mask?: boolean;    // 白い仮面(ナナホシ)
 };
 
 const CONFIGS: Record<string, Cfg> = {
-  // --- 男子 ---
-  ayanokoji: { gender: 'm', front: 'messy', back: 'short-m', hair: '#8a5a44', eyes: '#6b5741', expr: 'neutral' },
-  hirata: { gender: 'm', front: 'curtain', back: 'short-m', hair: '#96884f', eyes: '#8a6d3f', expr: 'smile' },
-  sudo: { gender: 'm', front: 'spiky', back: 'short-m', hair: '#c4372f', eyes: '#7a2d22', expr: 'fierce' },
-  koenji: { gender: 'm', front: 'slick', back: 'mid', hair: '#e0b93f', eyes: '#3f7a4f', expr: 'smirk' },
-  keisei: { gender: 'm', front: 'curtain', back: 'short-m', hair: '#3f6058', eyes: '#46628a', expr: 'neutral', glasses: true },
-  ryuen: { gender: 'm', front: 'slick', back: 'mane', hair: '#6b3a4a', eyes: '#7a6dd9', expr: 'smirk', collar: 'open' },
-  miyake: { gender: 'm', front: 'messy', back: 'short-m', hair: '#7a3f42', eyes: '#6b4444', expr: 'neutral' },
-  ike: { gender: 'm', front: 'messy', back: 'short-m', hair: '#8a6848', eyes: '#6b5741', expr: 'smile' },
-  yamauchi: { gender: 'm', front: 'neat', back: 'short-m', hair: '#5f5a3a', eyes: '#5f4a3d', expr: 'smile' },
-  kanzaki: { gender: 'm', front: 'neat', back: 'short-m', hair: '#6a5f8a', eyes: '#5a4a7a', expr: 'neutral' },
-  ishizaki: { gender: 'm', front: 'spiky', back: 'short-m', hair: '#37473c', eyes: '#4a3f35', expr: 'fierce', collar: 'open' },
-  katsuragi: { gender: 'm', front: 'none', back: 'none', hair: '#4a4f5a', eyes: '#4a4a55', expr: 'fierce' },
-  hashimoto: { gender: 'm', front: 'neat', back: 'short-m', hair: '#b8a468', eyes: '#7a6a45', expr: 'smirk' },
-  manabu: { gender: 'm', front: 'neat', back: 'short-m', hair: '#2c2c36', eyes: '#4a3f50', expr: 'neutral', glasses: true },
-  nagumo: { gender: 'm', front: 'neat', back: 'short-m', hair: '#d9bd5f', eyes: '#8a7a4a', expr: 'smirk' },
-  hosen: { gender: 'm', front: 'spiky', back: 'short-m', hair: '#96684a', eyes: '#7a4a3a', expr: 'fierce', collar: 'open', skin: '#f2c9a6' },
-  yagami: { gender: 'm', front: 'neat', back: 'short-m', hair: '#94484a', eyes: '#7a4a44', expr: 'smile' },
-  tsukishiro: { gender: 'm', front: 'neat', back: 'short-m', hair: '#8d8d97', eyes: '#5a5a6a', expr: 'smirk', jacket: '#565b66' },
-  shibata: { gender: 'm', front: 'messy', back: 'short-m', hair: '#c8b088', eyes: '#7a8ab0', expr: 'smile', hairband: '#f2f2ef' },
-  kaneda: { gender: 'm', front: 'hime', back: 'short-m', hair: '#cbb37a', eyes: '#8a7a50', expr: 'neutral', glasses: true },
-  albert: { gender: 'm', front: 'buzz', back: 'none', hair: '#2f2a28', eyes: '#3d3630', expr: 'fierce', skin: '#e0a87e', sunglasses: true },
-  mashima: { gender: 'm', front: 'neat', back: 'short-m', hair: '#6b5f4a', eyes: '#4a4a40', expr: 'neutral', jacket: '#3d4458' },
-  'sakayanagi-dir': { gender: 'm', front: 'neat', back: 'short-m', hair: '#d8d8dc', eyes: '#5a7a9a', expr: 'neutral', glasses: true, jacket: '#7a8290' },
-  yahiko: { gender: 'm', front: 'buzz', back: 'short-m', hair: '#4a6b3f', eyes: '#a8a848', expr: 'neutral' },
-  ishigami: { gender: 'm', front: 'curtain', back: 'topknot', hair: '#b8c4c4', eyes: '#7a8a94', expr: 'neutral' },
-  utomiya: { gender: 'm', front: 'messy', back: 'short-m', hair: '#33475c', eyes: '#4a5a8a', expr: 'fierce' },
-  shiraishi: { gender: 'f', front: 'side', back: 'long', hair: '#ded4c4', eyes: '#8a80a0', expr: 'soft', hairband: '#3a3a44' },
-  // --- 女子 ---
-  horikita: { gender: 'f', front: 'hime', back: 'bob', hair: '#2a2731', eyes: '#b0405c', expr: 'neutral' },
-  karuizawa: { gender: 'f', front: 'side', back: 'ponytail', hair: '#e8b45e', eyes: '#4f7ad9', expr: 'smile', ribbon: '#d94f6d' },
-  kushida: { gender: 'f', front: 'hime', back: 'bob', hair: '#c9986b', eyes: '#d98a3d', expr: 'smile' },
-  sakura: { gender: 'f', front: 'curtain', back: 'bob', hair: '#e8a0b4', eyes: '#c96a80', expr: 'shy', glasses: true },
-  haruka: { gender: 'f', front: 'side', back: 'long', hair: '#5580b0', eyes: '#4a6da0', expr: 'smile' },
-  ichinose: { gender: 'f', front: 'side', back: 'long', hair: '#eba0b6', eyes: '#d98a3d', expr: 'smile' },
-  sakayanagi: { gender: 'f', front: 'curtain', back: 'wavy', hair: '#cfc4de', eyes: '#9a8ac9', expr: 'soft', beret: true },
-  ibuki: { gender: 'f', front: 'side', back: 'bob', hair: '#4e7f96', eyes: '#5f8a6d', expr: 'fierce' },
-  chabashira: { gender: 'f', front: 'side', back: 'ponytail', hair: '#4a3628', eyes: '#5f4a3d', expr: 'neutral', jacket: '#37415a', noBow: true },
-  amasawa: { gender: 'f', front: 'flat', back: 'twin', hair: '#cc4f60', eyes: '#d95f6d', expr: 'smile', ribbon: '#8a2438' },
-  sato: { gender: 'f', front: 'side', back: 'wavy', hair: '#b2687a', eyes: '#4f7ad9', expr: 'smile' },
-  matsushita: { gender: 'f', front: 'curtain', back: 'long', hair: '#ad8a60', eyes: '#4a6da0', expr: 'soft' },
-  shinohara: { gender: 'f', front: 'side', back: 'bob', hair: '#3d5a6e', eyes: '#96543f', expr: 'smile' },
-  mii: { gender: 'f', front: 'hime', back: 'twin', hair: '#4b4e80', eyes: '#6a5a9a', expr: 'smile', ribbon: '#4f5f8a' },
-  hiyori: { gender: 'f', front: 'curtain', back: 'long', hair: '#dcdce4', eyes: '#7a8ac9', expr: 'soft', ribbon: '#55608c' },
-  kamuro: { gender: 'f', front: 'side', back: 'long', hair: '#7c5f9c', eyes: '#8d7cb5', expr: 'neutral' },
-  tachibana: { gender: 'f', front: 'hime', back: 'buns', hair: '#8d6cab', eyes: '#97689f', expr: 'neutral' },
-  asahina: { gender: 'f', front: 'side', back: 'long', hair: '#e59a86', eyes: '#cf8352', expr: 'smile', ribbon: '#e5c44f' },
-  nanase: { gender: 'f', front: 'hime', back: 'long', hair: '#e9dcae', eyes: '#a96a52', expr: 'neutral' },
-  tsubaki: { gender: 'f', front: 'side', back: 'long', hair: '#e2d4ac', eyes: '#8d7c9c', expr: 'neutral' },
-  hoshinomiya: { gender: 'f', front: 'side', back: 'wavy', hair: '#c7a276', eyes: '#b0685a', expr: 'smile', jacket: '#e5a8ba', noBow: true },
-  onodera: { gender: 'f', front: 'side', back: 'short-m', hair: '#a04b48', eyes: '#d99a3d', expr: 'smile' },
-  amikura: { gender: 'f', front: 'side', back: 'ponytail', hair: '#5a5f9c', eyes: '#7a7ad0', expr: 'smile', ribbon: '#f0f0f5' },
+  // --- グレイラット家とブエナ村 ---
+  rudeus: { gender: 'm', front: 'messy', back: 'short-m', hair: '#9a8265', eyes: '#5f7a52', expr: 'neutral', jacket: '#57604a' },
+  paul: { gender: 'm', front: 'messy', back: 'mid', hair: '#8a6a4f', eyes: '#6b5741', expr: 'smirk', jacket: '#6b4f3a' },
+  zenith: { gender: 'f', front: 'side', back: 'long', hair: '#e8cf7e', eyes: '#4a8ad0', expr: 'smile', jacket: '#e8e2d0' },
+  lilia: { gender: 'f', front: 'side', back: 'buns', hair: '#9a8f7c', eyes: '#5f5a4a', expr: 'neutral', jacket: '#4a4440' },
+  aisha: { gender: 'f', front: 'side', back: 'twin', hair: '#a08560', eyes: '#6b5741', expr: 'smile', jacket: '#5a4f40', ribbon: '#d94f6d' },
+  norn: { gender: 'f', front: 'curtain', back: 'bob', hair: '#d8c078', eyes: '#4a8ad0', expr: 'shy', jacket: '#6b5f8a' },
+  sylphy: { gender: 'f', front: 'flat', back: 'bob', hair: '#a8d8b0', eyes: '#7a5f4a', expr: 'soft', ears: 'elf', jacket: '#6a8a5f' },
+  // --- 師匠たち ---
+  roxy: { gender: 'f', front: 'hime', back: 'braid', hair: '#6a9ad0', eyes: '#5a7ab8', expr: 'neutral', jacket: '#3f4a6b' },
+  ghislaine: { gender: 'f', front: 'flat', back: 'short-m', hair: '#e0d8c8', eyes: '#d0b040', expr: 'fierce', skin: '#b07a52', ears: 'beast', eyepatch: true, jacket: '#5a4f40' },
+  // --- 旅の仲間 ---
+  eris: { gender: 'f', front: 'side', back: 'wavy', hair: '#c4372f', eyes: '#a05a3f', expr: 'fierce', jacket: '#8a3040' },
+  ruijerd: { gender: 'm', front: 'spiky', back: 'mid', hair: '#3fae87', eyes: '#4a6a5a', expr: 'fierce', gem: true, jacket: '#4a5548' },
+  // --- ラノア魔法大学 ---
+  cliff: { gender: 'm', front: 'neat', back: 'short-m', hair: '#8a5a44', eyes: '#5f4a3d', expr: 'neutral', jacket: '#6b5f8a' },
+  zanoba: { gender: 'm', front: 'buzz', back: 'short-m', hair: '#6b5a3f', eyes: '#6b5741', expr: 'smile', jacket: '#7a6a45' },
+  nanahoshi: { gender: 'f', front: 'curtain', back: 'long', hair: '#2a2731', eyes: '#4a3f35', expr: 'neutral', mask: true, jacket: '#4a4455' },
+  // --- 強者たち・七大列強 ---
+  kishirika: { gender: 'f', front: 'flat', back: 'twin', hair: '#5a2a7a', eyes: '#d05f8a', expr: 'smile', skin: '#e8c8b0', jacket: '#3a2a45' },
+  badigadi: { gender: 'm', front: 'buzz', back: 'none', hair: '#1d1a12', eyes: '#d0b040', expr: 'smile', skin: '#6a5a8a', jacket: '#3a2a45' },
+  orsted: { gender: 'm', front: 'neat', back: 'mid', hair: '#e0ded8', eyes: '#c0a030', expr: 'fierce', jacket: '#2a2a35' },
 };
 
-const CLASS_BG: Record<string, string> = {
-  A: '#ede5fb', B: '#e0edf9', C: '#f8ecd9', D: '#f9e2e6',
+// 種族ごとのカード背景色
+const RACE_BG: Record<string, string> = {
+  human: '#f0e7d4',
+  superd: '#dcefe4',
+  migurd: '#dde9f5',
+  elf: '#e4f0d8',
+  beast: '#f8ecd9',
+  demon: '#ede5fb',
+  dragon: '#f9e2e6',
+  other: '#e7ebe6',
 };
 
 const { id, size = 96, classKey } = Astro.props;
 const cfg = CONFIGS[id];
-const bg = (classKey && CLASS_BG[classKey]) || '#e7ebf1';
+const bg = (classKey && RACE_BG[classKey]) || '#ece4d0';
 const skin = cfg?.skin ?? '#ffe8d8';
-// 制服: 高育の男女共通の赤ブレザー(公式ビジュアル準拠)
-const jacket = cfg?.jacket ?? '#a83240';
+// 上着: 既定は旅装の焦茶。キャラごとにローブ等の色で上書き
+const jacket = cfg?.jacket ?? '#6b5a3f';
 const darker = (hex: string) => {
   const n = parseInt(hex.slice(1), 16);
   const f = (v: number) => Math.max(0, Math.round(v * 0.72));
@@ -152,34 +129,30 @@ const isM = cfg?.gender === 'm';
           <path d="M90 38 Q110 48 105 84 Q102 104 93 116 Q88 96 90 74 Q92 52 83 40 Z" fill={cfg.hair} />
         </>
       )}
+      {cfg.back === 'braid' && (
+        <>
+          <path d="M32 76 Q26 52 36 36 Q46 22 60 22 Q74 22 84 36 Q94 52 88 76 Q74 84 60 84 Q46 84 32 76 Z" fill={cfg.hair} />
+          <circle cx="86" cy="58" r="7" fill={cfg.hair} />
+          <circle cx="90" cy="72" r="6.5" fill={cfg.hair} />
+          <circle cx="92" cy="86" r="6" fill={cfg.hair} />
+          <circle cx="93" cy="99" r="5.5" fill={cfg.hair} />
+          <path d="M92 104 L96 114 L89 112 Z" fill={cfg.hair} />
+        </>
+      )}
 
-      {/* 体・制服 */}
+      {/* 体・旅装(ローブ/チュニック) */}
       {isM ? (
         <>
           <path d="M22 120 Q24 93 44 89 L60 87 L76 89 Q96 93 98 120 Z" fill={jacket} />
-          {cfg.collar === 'open' ? (
-            <>
-              <path d="M46 91 L60 87 L74 91 L66 108 Q60 101 54 108 Z" fill="#f5f4ef" />
-              <path d="M55 92 L60 89 L65 92 L60 101 Z" fill={skin} />
-            </>
-          ) : (
-            <>
-              <path d="M50 90 L60 87 L70 90 L64 102 L60 96 L56 102 Z" fill="#fff" />
-              <path d="M57.5 95 L62.5 95 L64 106 L60 111 L56 106 Z" fill="#2f3f73" />
-            </>
-          )}
+          <path d="M46 91 L60 87 L74 91 L66 108 Q60 101 54 108 Z" fill="#f5f1e6" />
+          <path d="M55 92 L60 89 L65 92 L60 101 Z" fill={skin} />
+          <path d="M56 99 L60 108 L64 99" stroke={darker(jacket)} stroke-width="1.6" fill="none" />
         </>
       ) : (
         <>
           <path d="M28 120 Q30 96 46 92 L60 90 L74 92 Q90 96 92 120 Z" fill={jacket} />
-          <path d="M52 92 L60 90 L68 92 L64 103 L60 97 L56 103 Z" fill="#fff" />
-          {!cfg.noBow && (
-            <g fill="#2f3f73">
-              <path d="M60 98 L49 93 L51 103 Z" />
-              <path d="M60 98 L71 93 L69 103 Z" />
-              <circle cx="60" cy="98" r="2.6" />
-            </g>
-          )}
+          <path d="M52 92 L60 90 L68 92 L64 103 L60 97 L56 103 Z" fill="#f5f1e6" />
+          <path d="M57 97 L60 104 L63 97" stroke={darker(jacket)} stroke-width="1.4" fill="none" />
         </>
       )}
 
@@ -189,10 +162,27 @@ const isM = cfg?.gender === 'm';
       ) : (
         <path d="M38 52 Q38 28 60 28 Q82 28 82 52 Q82 66 74 74 Q67 80 60 80 Q53 80 46 74 Q38 66 38 52 Z" fill={skin} />
       )}
-      <ellipse cx="38" cy="56" rx="3.4" ry="5" fill={skin} />
-      <ellipse cx="82" cy="56" rx="3.4" ry="5" fill={skin} />
+      {cfg.ears === 'elf' ? (
+        <>
+          <path d="M40 56 L26 48 Q30 60 40 62 Z" fill={skin} />
+          <path d="M80 56 L94 48 Q90 60 80 62 Z" fill={skin} />
+        </>
+      ) : (
+        <>
+          <ellipse cx="38" cy="56" rx="3.4" ry="5" fill={skin} />
+          <ellipse cx="82" cy="56" rx="3.4" ry="5" fill={skin} />
+        </>
+      )}
+      {cfg.ears === 'beast' && (
+        <g>
+          <path d="M34 30 L28 12 L46 22 Z" fill={cfg.hair} />
+          <path d="M86 30 L92 12 L74 22 Z" fill={cfg.hair} />
+          <path d="M35 27 L31 16 L42 22 Z" fill="#f0c8b8" />
+          <path d="M85 27 L89 16 L78 22 Z" fill="#f0c8b8" />
+        </g>
+      )}
 
-      {/* 目 (男子は細め+上まぶたライン、女子は大きめ) */}
+      {/* 目 (男性は細め+上まぶたライン、女性は大きめ) */}
       {isM ? (
         <g>
           <ellipse cx="50" cy="59" rx="5.2" ry="4.4" fill="#fff" />
@@ -255,7 +245,7 @@ const isM = cfg?.gender === 'm';
       {cfg.expr === 'shy' && <path d="M57 71.5 Q60 70.4 63 71.5" stroke="#c25f6d" stroke-width="1.8" stroke-linecap="round" fill="none" />}
       {cfg.expr === 'fierce' && <path d="M55.5 72 Q60 70 64.5 72" stroke={isM ? '#a05a4a' : '#c25f6d'} stroke-width="2" stroke-linecap="round" fill="none" />}
 
-      {/* 頬(女子のみ) */}
+      {/* 頬(女性のみ) */}
       {!isM && (
         <>
           <ellipse cx="45" cy="66" rx="3.6" ry="2" fill="#ffb9b0" opacity="0.55" />
@@ -279,19 +269,19 @@ const isM = cfg?.gender === 'm';
         </>
       )}
 
-      {/* 小物 */}
-      {cfg.hairband && <path d="M39 38 Q60 27 81 38" stroke={cfg.hairband} stroke-width="5" fill="none" stroke-linecap="round" />}
-      {cfg.sunglasses && (
-        <g fill="#23252e">
-          <rect x="42" y="53" width="16" height="10" rx="4" />
-          <rect x="62" y="53" width="16" height="10" rx="4" />
-          <path d="M57 56 L63 56 L63 58.5 L57 58.5 Z" />
+      {/* 種族・キャラ小物 */}
+      {cfg.gem && <ellipse cx="60" cy="42" rx="3.4" ry="4.2" fill="#c22843" stroke="#8a1830" stroke-width="1" />}
+      {cfg.eyepatch && (
+        <g>
+          <path d="M36 50 L84 60" stroke="#3a3230" stroke-width="2.4" fill="none" />
+          <ellipse cx="70" cy="58" rx="8" ry="7" fill="#3a3230" />
         </g>
       )}
-      {cfg.beret && (
+      {cfg.mask && (
         <g>
-          <path d="M32 34 Q34 18 60 18 Q86 18 88 34 Q74 40 60 39 Q46 40 32 34 Z" fill="#2c2c38" />
-          <circle cx="60" cy="18" r="2.4" fill="#2c2c38" />
+          <path d="M40 50 Q40 44 60 44 Q80 44 80 50 Q80 66 60 67 Q40 66 40 50 Z" fill="#f5f1e6" stroke="#c8bfa8" stroke-width="1.2" />
+          <ellipse cx="50" cy="56" rx="4.4" ry="2.4" fill="#3a3230" />
+          <ellipse cx="70" cy="56" rx="4.4" ry="2.4" fill="#3a3230" />
         </g>
       )}
       {cfg.glasses && (
@@ -322,16 +312,16 @@ const isM = cfg?.gender === 'm';
         </g>
       )}
     </g>
-    <circle cx="60" cy="60" r="58" fill="none" stroke="rgb(27 42 74 / 0.12)" stroke-width="2" />
+    <circle cx="60" cy="60" r="58" fill="none" stroke="rgb(58 45 35 / 0.15)" stroke-width="2" />
   </svg>
 ) : (
   <svg viewBox="0 0 120 120" width={size} height={size} role="img" aria-label="シルエット">
     <clipPath id={`clip-sil-${id}`}><circle cx="60" cy="60" r="58" /></clipPath>
     <g clip-path={`#clip-sil-${id}`} style={`clip-path: url(#clip-sil-${id})`}>
       <rect width="120" height="120" fill={bg} />
-      <circle cx="60" cy="48" r="20" fill="#a8b2c2" />
-      <path d="M24 120 Q28 84 60 84 Q92 84 96 120 Z" fill="#a8b2c2" />
+      <circle cx="60" cy="48" r="20" fill="#b0a48e" />
+      <path d="M24 120 Q28 84 60 84 Q92 84 96 120 Z" fill="#b0a48e" />
     </g>
-    <circle cx="60" cy="60" r="58" fill="none" stroke="rgb(27 42 74 / 0.12)" stroke-width="2" />
+    <circle cx="60" cy="60" r="58" fill="none" stroke="rgb(58 45 35 / 0.15)" stroke-width="2" />
   </svg>
 )}

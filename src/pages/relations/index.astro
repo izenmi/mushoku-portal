@@ -2,11 +2,11 @@
 import Base from '../../layouts/Base.astro';
 import Portrait from '../../components/Portrait.astro';
 import rel from '../../data/relations.json';
-import data from '../../data/students.json';
+import data from '../../data/characters.json';
 import timeline from '../../data/timeline.json';
 
 const base = import.meta.env.BASE_URL;
-const byId = Object.fromEntries((data.students as any[]).map((s) => [s.id, s]));
+const byId = Object.fromEntries((data.characters as any[]).map((s) => [s.id, s]));
 const nodes = rel.nodes.map((n) => ({ ...n, s: byId[n.id] })).filter((n) => n.s);
 const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.label ?? '';
 
@@ -14,11 +14,11 @@ const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.labe
 const clientNodes = Object.fromEntries(nodes.map((n) => [n.id, { x: n.x, y: n.y, sp: n.s.sp }]));
 ---
 
-<Base title="人物相関図" description="よう実の人物相関図。読了位置に連動して関係が変化するインタラクティブマップ。">
+<Base title="人物相関図" description="無職転生の人物相関図。読了位置に連動して関係が変化するインタラクティブマップ。">
   <h1>🕸️ 人物相関図</h1>
   <p class="muted">
     読了位置(右上📖)を動かすと、関係線が物語の進行に合わせて現れたり消えたりします。
-    ポートレートをタップすると生徒詳細へ。線にカーソルを合わせると関係の説明が出ます。
+    ポートレートをタップすると人物詳細へ。線にカーソルを合わせると関係の説明が出ます。
   </p>
 
   <div class="card legend-card">
@@ -35,7 +35,7 @@ const clientNodes = Object.fromEntries(nodes.map((n) => [n.id, { x: n.x, y: n.y,
       <svg id="rel-svg" viewBox="0 0 1200 900" width="1200" role="img" aria-label="人物相関図">
         <g id="rel-edges"></g>
         {nodes.map((n) => (
-          <a href={`${base}students/${n.id}/`}>
+          <a href={`${base}characters/${n.id}/`}>
             <g
               class="rel-node"
               transform={`translate(${n.x - 32}, ${n.y - 32})`}
@@ -43,7 +43,7 @@ const clientNodes = Object.fromEntries(nodes.map((n) => [n.id, { x: n.x, y: n.y,
               data-sp-hide={n.s.sp > 1 ? '' : undefined}
               data-sp-label={n.s.sp > 1 ? spLabel(n.s.sp) : undefined}
             >
-              <Portrait id={n.s.portrait ? n.id : `sil-${n.id}`} size={64} classKey={n.s.class} />
+              <Portrait id={n.s.portrait ? n.id : `sil-${n.id}`} size={64} classKey={n.s.race} />
               <text x="32" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">{n.s.name}</text>
             </g>
           </a>
@@ -60,7 +60,7 @@ const clientNodes = Object.fromEntries(nodes.map((n) => [n.id, { x: n.x, y: n.y,
     const layer = document.getElementById('rel-edges');
 
     const draw = () => {
-      const p = window.ANHS ? window.ANHS.progress : 0;
+      const p = window.MUSHOKU ? window.MUSHOKU.progress : 0;
       layer.innerHTML = '';
       // 同一ペアの複数関係をオフセットして重ならないように
       const pairCount = {};
@@ -104,7 +104,7 @@ const clientNodes = Object.fromEntries(nodes.map((n) => [n.id, { x: n.x, y: n.y,
         layer.appendChild(text);
       });
     };
-    document.addEventListener('anhs:progress', draw);
+    document.addEventListener('mushoku:progress', draw);
     window.addEventListener('DOMContentLoaded', draw);
   </script>
 

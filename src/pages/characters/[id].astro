@@ -1,0 +1,155 @@
+---
+import Base from '../../layouts/Base.astro';
+import Portrait from '../../components/Portrait.astro';
+import RadarChart from '../../components/RadarChart.astro';
+import data from '../../data/characters.json';
+import battles from '../../data/battles.json';
+import timeline from '../../data/timeline.json';
+
+export function getStaticPaths() {
+  return data.characters.map((s) => ({ params: { id: s.id } }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { id } = Astro.params;
+const s = data.characters.find((x) => x.id === id)! as any;
+
+const races: Record<string, string> = data.races;
+const groupLabel = data.groups.find((g) => g.key === s.group)?.label ?? '';
+
+const AXES = [
+  ['magic', '魔術'], ['sword', '剣・武技'], ['combat', '体術・実戦'], ['wits', '知略'],
+] as const;
+const radarValues = (c: any) => AXES.map(([k, label]) => ({ label, grade: c[k][0], score: c[k][1] }));
+
+const relatedBattles = (battles as any[]).filter((b) => b.chars?.includes(s.id));
+const spLabel = (sp: number) => timeline.volumes.find((v) => v.ord === sp)?.label ?? '';
+---
+
+<Base title={`${s.name}(${s.kana})`} description={`${s.name}のギルドカード(能力チャート・階級・人物データ)。${s.bio.slice(0, 60)}`}>
+  <nav class="crumbs muted"><a href={`${base}characters/`}>人物名鑑</a> / {s.name}</nav>
+
+  <div class="profile card">
+    <div class="profile-head">
+      <Portrait id={s.portrait ? s.id : `sil-${s.id}`} size={128} classKey={s.race} />
+      <div>
+        <h1>{s.name} <small class="muted">{s.kana}</small></h1>
+        <p class="tags">
+          <span class="class-chip" data-class={s.race}>{races[s.race]}</span>
+          <span class="group-tag">{groupLabel}</span>
+          {s.birth && <span class="group-tag">甲龍暦{s.birth}年生{s.birthEst ? '(推定)' : ''}</span>}
+          {!s.birth && s.ageNote && <span class="group-tag">{s.ageNote}</span>}
+        </p>
+        {s.status && (
+          <p data-sp={s.status.sp} data-sp-label={spLabel(s.status.sp)}>
+            <span class="status-badge">⚠ {s.status.text}</span>
+          </p>
+        )}
+      </div>
+    </div>
+    <p class="bio">{s.bio}</p>
+  </div>
+
+  {s.tiers && s.tiers.length > 0 && (
+    <section>
+      <h2 class="section-title">階級・肩書き</h2>
+      <div data-sp-count>
+        <p class="sp-note"></p>
+        <ul class="tier-list">
+          {s.tiers.map((t: any) => (
+            <li class="card tier-item" data-sp={t.sp > 1 ? t.sp : undefined} data-sp-hide={t.sp > 1 ? '' : undefined}>
+              <b class="tier" data-tier={t.tier}>{t.tier}</b>
+              <span>{t.label}</span>
+              {t.est && <small class="muted">(管理人推定)</small>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {s.chart && s.chart.length > 0 && (
+    <section>
+      <h2 class="section-title">能力チャート<small class="muted">(管理人推定)</small></h2>
+      <div class="chart-wrap">
+        {s.chart.map((h: any) => (
+          <div class="card chart-card" data-sp={h.sp > 6 ? h.sp : undefined} data-sp-label={spLabel(h.sp)}>
+            <h3>{h.era}</h3>
+            <RadarChart values={radarValues(h)} />
+          </div>
+        ))}
+      </div>
+      <p class="muted chart-src">
+        数値(0-100)は作中描写に基づく管理人の推定です。階級表記は原作既述のものを優先しています。
+        <a href={`${base}versus/?a=${s.id}`}>この人物を他の人物と比較する →</a>
+      </p>
+    </section>
+  )}
+
+  {s.notes && s.notes.length > 0 && (
+    <section>
+      <h2 class="section-title">その後の歩み<small class="muted">(読了位置に応じて表示)</small></h2>
+      <div data-sp-count>
+        <p class="sp-note"></p>
+        <ul class="notes">
+          {s.notes.map((n: any) => (
+            <li class="card note-item" data-sp={n.sp} data-sp-label={spLabel(n.sp)}>
+              <span class="note-vol">{spLabel(n.sp)}</span>
+              <span>{n.text}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {relatedBattles.length > 0 && (
+    <section>
+      <h2 class="section-title">関連する戦い・事件</h2>
+      <div data-sp-count>
+        <p class="sp-note"></p>
+        <ul class="battle-links">
+          {relatedBattles.map((b) => (
+            <li data-sp={b.sp > 1 ? b.sp : undefined} data-sp-hide={b.sp > 1 ? '' : undefined}>
+              <a href={`${base}battles/${b.id}/`} class="card battle-link">
+                <span class="muted">書籍{b.vol}巻</span> {b.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <style>
+    .crumbs { font-size: 0.85rem; margin-bottom: 12px; }
+    .profile { padding: 20px; }
+    .profile-head { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .profile-head h1 { margin: 0 0 6px; font-size: 1.5rem; }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 0; }
+    .group-tag {
+      font-size: 0.8em; padding: 0.1em 0.6em; border-radius: 999px;
+      background: var(--surface-2); color: var(--ink-2);
+    }
+    .status-badge {
+      display: inline-block; background: var(--accent-soft); color: var(--accent);
+      font-weight: 700; font-size: 0.85rem; border-radius: 8px; padding: 3px 10px;
+    }
+    .bio { margin-bottom: 0; }
+    .tier-list { list-style: none; padding: 0; display: grid; gap: 8px; }
+    .tier-item { padding: 10px 14px; display: flex; gap: 10px; align-items: center; }
+    .chart-wrap { display: flex; gap: 14px; flex-wrap: wrap; }
+    .chart-card { padding: 14px 18px; }
+    .chart-card h3 { margin: 0 0 4px; font-size: 0.95rem; color: var(--ink-2); }
+    .chart-src { font-size: 0.78rem; margin-top: 10px; }
+    .notes { list-style: none; padding: 0; display: grid; gap: 10px; }
+    .note-item { padding: 12px 14px; display: flex; gap: 12px; align-items: baseline; }
+    .note-vol {
+      flex-shrink: 0; font-size: 0.75rem; font-weight: 700; color: var(--accent);
+      background: var(--accent-soft); border-radius: 6px; padding: 2px 8px;
+    }
+    .battle-links { list-style: none; padding: 0; display: grid; gap: 8px; }
+    .battle-link { display: block; padding: 10px 14px; text-decoration: none; }
+    .battle-link:hover { border-color: var(--accent); }
+  </style>
+</Base>

@@ -1,0 +1,107 @@
+---
+import Base from '../../layouts/Base.astro';
+import Portrait from '../../components/Portrait.astro';
+import data from '../../data/characters.json';
+
+const base = import.meta.env.BASE_URL;
+const chars = data.characters;
+const races: Record<string, string> = data.races;
+
+const sections = data.groups
+  .map((g) => ({ ...g, members: chars.filter((c) => c.group === g.key) }))
+  .filter((g) => g.members.length > 0);
+const firstTier = (c: any) => c.tiers?.[0];
+---
+
+<Base title="人物名鑑" description="ギルドカード風のキャラクター名鑑。能力チャート・階級・その後の歩みを収録。">
+  <h1>🗂️ 人物名鑑 <small class="muted">GUILD CARD ARCHIVE - 冒険者ギルド資料室</small></h1>
+  <p class="muted">魔術・剣術の階級は原作既述のもの(推定には印を付けています)。カードをタップするとギルドカード(詳細)を閲覧できます。</p>
+
+  <div class="toolbar card">
+    <input id="q" type="search" placeholder="名前・かなで検索" />
+    <div class="chips">
+      <button class="filter-chip active" data-filter="">全員</button>
+      {sections.map((g) => (
+        <button class="filter-chip" data-filter={`group-${g.key}`}>{g.label}</button>
+      ))}
+    </div>
+  </div>
+
+  <div id="roster" data-sp-count>
+    <p class="sp-note"></p>
+    {sections.map((g) => (
+      <section class="roster-section" data-section={`group-${g.key}`}>
+        <h2 class="section-title">{g.label}</h2>
+        <div class="grid cards">
+          {g.members.map((s) => (
+            <a
+              href={`${base}characters/${s.id}/`}
+              class="char-card card"
+              data-sp={s.sp > 1 ? s.sp : undefined}
+              data-sp-hide={s.sp > 1 ? '' : undefined}
+              data-name={`${s.name} ${s.kana}`}
+            >
+              <Portrait id={s.portrait ? s.id : `sil-${s.id}`} size={72} classKey={s.race} />
+              <div class="char-meta">
+                <strong>{s.name}</strong>
+                <small class="muted">{races[s.race]}</small>
+                {firstTier(s) && (
+                  <div class="mini-tier">
+                    <b class="tier" data-tier={firstTier(s).tier}>{firstTier(s).tier}</b>
+                    <span>{firstTier(s).label}{firstTier(s).est ? '※' : ''}</span>
+                  </div>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+  <p class="muted" style="font-size: 0.78rem;">※印は管理人推定の階級です。</p>
+
+  <script>
+    const q = document.getElementById('q') as HTMLInputElement;
+    const cards = [...document.querySelectorAll<HTMLElement>('.char-card')];
+    const sections = [...document.querySelectorAll<HTMLElement>('.roster-section')];
+    let filter = '';
+
+    const applyFilter = () => {
+      const term = q.value.trim().toLowerCase();
+      sections.forEach((sec) => {
+        const visible = filter === '' || sec.dataset.section === filter;
+        sec.style.display = visible ? '' : 'none';
+      });
+      cards.forEach((c) => {
+        const hit = term === '' || (c.dataset.name ?? '').toLowerCase().includes(term);
+        c.style.setProperty('display', hit ? '' : 'none');
+      });
+    };
+    q.addEventListener('input', applyFilter);
+    document.querySelectorAll<HTMLElement>('.filter-chip').forEach((b) => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach((x) => x.classList.remove('active'));
+        b.classList.add('active');
+        filter = b.dataset.filter ?? '';
+        applyFilter();
+      });
+    });
+  </script>
+
+  <style>
+    .toolbar { padding: 14px; display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+    .toolbar input {
+      padding: 9px 12px; border-radius: 8px; border: 1px solid var(--line);
+      background: var(--bg); color: var(--ink); font-size: 0.95rem;
+    }
+    .cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .char-card {
+      display: flex; gap: 12px; align-items: center; padding: 12px;
+      text-decoration: none; transition: transform 0.1s ease;
+    }
+    .char-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .char-meta { display: flex; flex-direction: column; line-height: 1.4; min-width: 0; }
+    .char-meta strong { font-size: 0.98rem; }
+    .mini-tier { display: flex; gap: 6px; align-items: center; font-size: 0.72rem; color: var(--ink-2); margin-top: 4px; }
+  </style>
+</Base>
