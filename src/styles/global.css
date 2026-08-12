@@ -1,50 +1,67 @@
-/* ===== 高度育成高等学校 学内ポータル デザイントークン ===== */
+/* ===== 冒険者ギルド資料室(無職転生ポータル)デザイントークン ===== */
 :root {
-  /* 基調色 */
-  --bg: #f2f4f8;
-  --surface: #ffffff;
-  --surface-2: #e9edf3;
-  --ink: #1b2a4a;
-  --ink-2: #52617e;
-  --line: #d4dae4;
-  /* アクセント: 制服の深紅 */
-  --accent: #b3223c;
+  /* 基調色: 羊皮紙 */
+  --bg: #f5f0e3;
+  --surface: #fdfaf2;
+  --surface-2: #efe7d4;
+  --ink: #33281c;
+  --ink-2: #77664e;
+  --line: #ddd1b8;
+  /* アクセント: 翡翠グリーン(スペルド族のエメラルド) */
+  --accent: #177e60;
   --accent-ink: #ffffff;
-  --accent-soft: #f7e3e7;
-  /* ネイビー(ヘッダー等) */
-  --navy: #1b2a4a;
-  --navy-ink: #eef2f8;
-  /* クラスカラー(入学時クラス基準) */
-  --class-a: #8b5cf6;
-  --class-b: #2f86d6;
-  --class-c: #d97706;
-  --class-d: #c22843;
-  --class-t: #64748b; /* 教職員・その他 */
-  /* ランクバッジ */
+  --accent-soft: #ddeee5;
+  /* 第2アクセント: 水魔術の青(グラフ・リンク系) */
+  --water: #2f6fb0;
+  /* 焦茶(ヘッダー等)。旧 --navy の役割 */
+  --navy: #3a2d23;
+  --navy-ink: #f2ebdd;
+  /* 種族カラー(チップ) */
+  --race-human: #8a6d3f;
+  --race-superd: #177e60;
+  --race-migurd: #2f6fb0;
+  --race-elf: #5f9a3f;
+  --race-beast: #d97706;
+  --race-demon: #8b5cf6;
+  --race-dragon: #c22843;
+  --race-other: #64748b;
+  /* 冒険者ランクバッジ(S/A〜F) */
+  --rank-s: #7a2d8a;
   --rank-a: #b78a1e;
   --rank-b: #2f6fbf;
   --rank-c: #2e8b57;
   --rank-d: #c07a1a;
   --rank-e: #8a94a3;
+  --rank-f: #a09a8c;
+  /* 魔術・剣術の階級バッジ(初級〜神級) */
+  --tier-god: #1d1a12;
+  --tier-emperor: #6b21a8;
+  --tier-king: #a16207;
+  --tier-saint: #b3223c;
+  --tier-advanced: #2f6fbf;
+  --tier-intermediate: #2e8b57;
+  --tier-beginner: #8a94a3;
   /* ネタバレマスク */
-  --mask-bg: #aeb6c2;
+  --mask-bg: #c2b8a2;
   --radius: 12px;
-  --shadow: 0 1px 3px rgb(27 42 74 / 0.10), 0 4px 14px rgb(27 42 74 / 0.06);
+  --shadow: 0 1px 3px rgb(58 45 35 / 0.10), 0 4px 14px rgb(58 45 35 / 0.06);
 }
 
 :root:not([data-theme="light"]) {
   @media (prefers-color-scheme: dark) {
-    --bg: #10151f;
-    --surface: #1a2130;
-    --surface-2: #242d40;
-    --ink: #e3e9f2;
-    --ink-2: #9aa7bd;
-    --line: #303b52;
-    --accent: #e04a63;
-    --accent-soft: #3a2029;
-    --navy: #141c2c;
-    --navy-ink: #e3e9f2;
-    --mask-bg: #465061;
+    --bg: #171310;
+    --surface: #221c16;
+    --surface-2: #2e261d;
+    --ink: #ede5d4;
+    --ink-2: #b3a48c;
+    --line: #453a2c;
+    --accent: #2fae87;
+    --accent-soft: #1d3229;
+    --water: #5f97d0;
+    --navy: #241b14;
+    --navy-ink: #ede5d4;
+    --tier-god: #d8c78a;
+    --mask-bg: #5a4f40;
     --shadow: 0 1px 3px rgb(0 0 0 / 0.4);
   }
 }
@@ -96,7 +113,7 @@ img, svg { max-width: 100%; height: auto; }
   background: var(--accent);
 }
 
-/* ランクバッジ (A+〜E-) */
+/* 冒険者ランクバッジ (S/A〜F) */
 .rank {
   display: inline-flex;
   align-items: center;
@@ -109,13 +126,37 @@ img, svg { max-width: 100%; height: auto; }
   color: #fff;
   letter-spacing: 0.02em;
 }
+.rank[data-rank^="S"] { background: var(--rank-s); }
 .rank[data-rank^="A"] { background: var(--rank-a); }
 .rank[data-rank^="B"] { background: var(--rank-b); }
 .rank[data-rank^="C"] { background: var(--rank-c); }
 .rank[data-rank^="D"] { background: var(--rank-d); }
 .rank[data-rank^="E"] { background: var(--rank-e); }
+.rank[data-rank^="F"] { background: var(--rank-f); }
 
-/* クラスチップ */
+/* 魔術・剣術の階級バッジ(初級〜神級)。data-tier="神級" のように階級名をそのまま渡す */
+.tier {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.2em;
+  padding: 0.05em 0.5em;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.82em;
+  color: #fff;
+  letter-spacing: 0.03em;
+  background: var(--tier-beginner);
+}
+.tier[data-tier$="神級"] { background: var(--tier-god); color: #f0dfa8; }
+.tier[data-tier$="帝級"] { background: var(--tier-emperor); }
+.tier[data-tier$="王級"] { background: var(--tier-king); }
+.tier[data-tier$="聖級"] { background: var(--tier-saint); }
+.tier[data-tier$="上級"] { background: var(--tier-advanced); }
+.tier[data-tier$="中級"] { background: var(--tier-intermediate); }
+.tier[data-tier$="初級"] { background: var(--tier-beginner); }
+
+/* 種族チップ */
 .class-chip {
   display: inline-flex;
   align-items: center;
@@ -125,12 +166,15 @@ img, svg { max-width: 100%; height: auto; }
   font-size: 0.8em;
   font-weight: 700;
   color: #fff;
-  background: var(--class-t);
+  background: var(--race-other);
 }
-.class-chip[data-class="A"] { background: var(--class-a); }
-.class-chip[data-class="B"] { background: var(--class-b); }
-.class-chip[data-class="C"] { background: var(--class-c); }
-.class-chip[data-class="D"] { background: var(--class-d); }
+.class-chip[data-class="human"] { background: var(--race-human); }
+.class-chip[data-class="superd"] { background: var(--race-superd); }
+.class-chip[data-class="migurd"] { background: var(--race-migurd); }
+.class-chip[data-class="elf"] { background: var(--race-elf); }
+.class-chip[data-class="beast"] { background: var(--race-beast); }
+.class-chip[data-class="demon"] { background: var(--race-demon); }
+.class-chip[data-class="dragon"] { background: var(--race-dragon); }
 
 /* 推定値マーク */
 .estimated {

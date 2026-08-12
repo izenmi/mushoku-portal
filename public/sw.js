@@ -1,6 +1,6 @@
-// 高育ポータル Service Worker
+// 無職転生ポータル Service Worker
 // HTML: network-first(オフライン時はキャッシュ) / アセット: cache-first
-const CACHE = 'anhs-portal-v1';
+const CACHE = 'mushoku-portal-v1';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();

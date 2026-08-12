@@ -7,18 +7,18 @@ interface Props {
   description?: string;
 }
 
-const { title, description = '「ようこそ実力至上主義の教室へ」非公式ファンサイト。OAA風キャラ名鑑・特別試験アーカイブ・クラスポイント推移・診断とクイズ。' } = Astro.props;
-const pageTitle = title ? `${title} | 高育ポータル` : '高育ポータル - よう実ファンサイト';
+const { title, description = '「無職転生 〜異世界行ったら本気だす〜」非公式ファンサイト。ギルドカード風の人物名鑑・戦いの記録・甲龍暦年表・診断とクイズ。読了位置に合わせたネタバレ防止機能付き。' } = Astro.props;
+const pageTitle = title ? `${title} | 無職転生ポータル` : '無職転生ポータル - 冒険者ギルド資料室';
 const base = import.meta.env.BASE_URL;
 
 const navGroups: { label: string; href?: string; items?: { href: string; label: string }[] }[] = [
-  { label: '生徒名鑑', href: `${base}students/` },
+  { label: '人物名鑑', href: `${base}characters/` },
   {
     label: '物語データ',
     items: [
-      { href: `${base}exams/`, label: '特別試験アーカイブ' },
-      { href: `${base}points/`, label: 'クラスポイント推移' },
-      { href: `${base}timeline/`, label: '統合年表' },
+      { href: `${base}battles/`, label: '戦い・事件の記録' },
+      { href: `${base}growth/`, label: 'ルーデウス成長記録' },
+      { href: `${base}timeline/`, label: '甲龍暦年表' },
       { href: `${base}anime/`, label: 'アニメ⇔原作対応表' },
       { href: `${base}glossary/`, label: '用語集・図解' },
     ],
@@ -27,18 +27,18 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
     label: '人物・分析',
     items: [
       { href: `${base}relations/`, label: '人物相関図' },
-      { href: `${base}ranking/`, label: 'OAAランキング' },
+      { href: `${base}ranking/`, label: '強さランキング' },
       { href: `${base}versus/`, label: 'VS比較' },
-      { href: `${base}birthdays/`, label: '誕生日カレンダー' },
+      { href: `${base}ages/`, label: '年齢早見表' },
     ],
   },
   {
     label: '遊ぶ',
     items: [
       { href: `${base}quiz/`, label: '原作知識クイズ' },
-      { href: `${base}shindan/`, label: 'クラス適性診断' },
-      { href: `${base}taiken/`, label: '特別試験を体験' },
-      { href: `${base}jitsuryoku/`, label: '実力テスト' },
+      { href: `${base}shindan/`, label: '流派適性診断' },
+      { href: `${base}taiken/`, label: '魔大陸を体験' },
+      { href: `${base}training/`, label: '修行場' },
     ],
   },
   { label: 'サイト情報', href: `${base}about/` },
@@ -57,7 +57,7 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="manifest" href={`${base}manifest.webmanifest`} />
     <link rel="apple-touch-icon" href={`${base}icons/apple-touch-icon.png`} />
-    <meta name="theme-color" content="#1b2a4a" />
+    <meta name="theme-color" content="#3a2d23" />
     <script is:inline>
       // ネタバレ処理が終わるまで sp 対象を隠す(フラッシュ防止)
       document.documentElement.classList.add('sp-pending');
@@ -67,10 +67,10 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href={base}>
-          <span class="brand-mark">高育</span>
+          <span class="brand-mark">転生</span>
           <span class="brand-text">
-            <strong>学内ポータル</strong>
-            <small>ようこそ実力至上主義の教室へ 非公式ファンサイト</small>
+            <strong>冒険者ギルド資料室</strong>
+            <small>無職転生 〜異世界行ったら本気だす〜 非公式ファンサイト</small>
           </span>
         </a>
         <nav class="site-nav" id="site-nav">
@@ -105,7 +105,7 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
     <footer class="site-footer">
       <div class="container">
         <p>
-          当サイトは『ようこそ実力至上主義の教室へ』(衣笠彰梧・KADOKAWA/MF文庫J)の<strong>非公式ファンサイト</strong>です。
+          当サイトは『無職転生 〜異世界行ったら本気だす〜』(理不尽な孫の手・KADOKAWA/MFブックス)の<strong>非公式ファンサイト</strong>です。
           原作の権利者とは一切関係ありません。掲載イラストはすべて管理人による自作です。
         </p>
         <p><a href={`${base}about/`}>このサイトについて</a></p>
@@ -115,7 +115,7 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
     <dialog id="sp-dialog" class="sp-dialog">
       <form method="dialog">
         <h2>📖 どこまで読みましたか?</h2>
-        <p class="muted">選んだ位置より先の情報(試験結果・退学者・関係の変化など)は自動でネタバレ防止されます。設定はこの端末にのみ保存されます。</p>
+        <p class="muted">選んだ位置より先の情報(戦いの結末・人物のその後・関係の変化など)は自動でネタバレ防止されます。設定はこの端末にのみ保存されます。</p>
         <div class="sp-presets">
           {timeline.presets.map((p) => (
             <button type="button" class="sp-preset" data-ord={p.ord}>{p.label}</button>
@@ -138,7 +138,7 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
 
     <script is:inline define:vars={{ volumes: timeline.volumes, presets: timeline.presets }}>
       (() => {
-        const KEY = 'anhs-progress';
+        const KEY = 'mushoku-progress';
         const labelOf = (ord) => {
           if (ord >= 999) return '全部OK';
           if (ord <= 0) return 'ネタバレ完全回避';
@@ -152,7 +152,7 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
 
         const stored = localStorage.getItem(KEY);
         let progress = stored === null ? 0 : Number(stored);
-        window.ANHS = { get progress() { return progress; } };
+        window.MUSHOKU = { get progress() { return progress; } };
 
         const apply = () => {
           document.querySelectorAll('[data-sp]').forEach((el) => {
@@ -176,7 +176,7 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
           const btnLabel = document.getElementById('sp-btn-label');
           if (btnLabel) btnLabel.textContent = labelOf(progress);
           document.documentElement.classList.remove('sp-pending');
-          document.dispatchEvent(new CustomEvent('anhs:progress', { detail: { progress } }));
+          document.dispatchEvent(new CustomEvent('mushoku:progress', { detail: { progress } }));
         };
 
         // 個別開示(ロック部分をタップ)
@@ -192,7 +192,7 @@ const navGroups: { label: string; href?: string; items?: { href: string; label: 
         const dialog = document.getElementById('sp-dialog');
         const select = document.getElementById('sp-vol-select');
         document.getElementById('sp-btn').addEventListener('click', () => {
-          select.value = String(Math.min(progress, 33));
+          select.value = String(Math.min(progress, 26));
           dialog.showModal();
         });
         dialog.querySelectorAll('.sp-preset').forEach((b) => {

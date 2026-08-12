@@ -1,16 +1,16 @@
 {
-  "name": "高育ポータル - よう実ファンサイト",
-  "short_name": "高育",
-  "description": "「ようこそ実力至上主義の教室へ」非公式ファンサイト。生徒名鑑・特別試験・クラスポイント・診断など。",
-  "start_url": "/youjitsu-portal/",
-  "scope": "/youjitsu-portal/",
+  "name": "無職転生ポータル - 冒険者ギルド資料室",
+  "short_name": "無職転生",
+  "description": "「無職転生 〜異世界行ったら本気だす〜」非公式ファンサイト。人物名鑑・戦いの記録・甲龍暦年表・診断など。",
+  "start_url": "/mushoku-portal/",
+  "scope": "/mushoku-portal/",
   "display": "standalone",
-  "theme_color": "#1b2a4a",
-  "background_color": "#f2f4f8",
+  "theme_color": "#3a2d23",
+  "background_color": "#f5f0e3",
   "lang": "ja",
   "icons": [
-    { "src": "/youjitsu-portal/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/youjitsu-portal/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/youjitsu-portal/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/mushoku-portal/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/mushoku-portal/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/mushoku-portal/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
