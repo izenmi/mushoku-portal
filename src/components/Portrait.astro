@@ -22,6 +22,7 @@ type Cfg = {
   gem?: boolean;     // 額の宝石(スペルド族)
   eyepatch?: boolean; // 眼帯(ギレーヌ)
   mask?: boolean;    // 白い仮面(ナナホシ)
+  hairband?: string; // カチューシャ/ヘッドドレス(リーリャ)
 };
 
 const CONFIGS: Record<string, Cfg> = {
@@ -29,8 +30,8 @@ const CONFIGS: Record<string, Cfg> = {
   rudeus: { gender: 'm', front: 'messy', back: 'short-m', hair: '#9a8265', eyes: '#5f7a52', expr: 'neutral', jacket: '#57604a' },
   paul: { gender: 'm', front: 'messy', back: 'mid', hair: '#8a6a4f', eyes: '#6b5741', expr: 'smirk', jacket: '#6b4f3a' },
   zenith: { gender: 'f', front: 'side', back: 'long', hair: '#e8cf7e', eyes: '#4a8ad0', expr: 'smile', jacket: '#e8e2d0' },
-  lilia: { gender: 'f', front: 'side', back: 'buns', hair: '#9a8f7c', eyes: '#5f5a4a', expr: 'neutral', jacket: '#4a4440' },
-  aisha: { gender: 'f', front: 'side', back: 'twin', hair: '#a08560', eyes: '#6b5741', expr: 'smile', jacket: '#5a4f40', ribbon: '#d94f6d' },
+  lilia: { gender: 'f', front: 'side', back: 'bob', hair: '#a8a49a', eyes: '#5f5a4a', expr: 'neutral', jacket: '#4a4440', hairband: '#f5f1e6' },
+  aisha: { gender: 'f', front: 'side', back: 'ponytail', hair: '#bdb9af', eyes: '#6b5741', expr: 'smile', jacket: '#5a4f40', ribbon: '#d94f6d' },
   norn: { gender: 'f', front: 'curtain', back: 'bob', hair: '#d8c078', eyes: '#4a8ad0', expr: 'shy', jacket: '#6b5f8a' },
   sylphy: { gender: 'f', front: 'flat', back: 'bob', hair: '#a8d8b0', eyes: '#7a5f4a', expr: 'soft', ears: 'elf', jacket: '#6a8a5f' },
   // --- 師匠たち ---
@@ -292,6 +293,7 @@ const isM = cfg?.gender === 'm';
       )}
 
       {/* 種族・キャラ小物 */}
+      {cfg.hairband && <path d="M39 38 Q60 27 81 38" stroke={cfg.hairband} stroke-width="5" fill="none" stroke-linecap="round" />}
       {cfg.gem && <ellipse cx="60" cy="42" rx="3.4" ry="4.2" fill="#c22843" stroke="#8a1830" stroke-width="1" />}
       {cfg.eyepatch && (
         <g>
