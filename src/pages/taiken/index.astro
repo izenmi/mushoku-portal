@@ -3,21 +3,21 @@ import Base from '../../layouts/Base.astro';
 import taiken from '../../data/taiken.json';
 ---
 
-<Base title="特別試験を体験" description="満場一致特別試験を一人称で体験する選択肢式アドベンチャー。あなたの選択で結末が変わる。">
-  <h1>🎭 特別試験を体験</h1>
+<Base title="魔大陸を体験" description="転移直後の魔大陸を一人称で体験する選択肢式アドベンチャー。あなたの選択で結末が変わる。">
+  <h1>🎭 魔大陸を体験</h1>
   <p class="muted">
-    もしあなたがあの教室にいたら、どのボタンを押しますか?
+    もしあなたが転移事件に巻き込まれていたら、どう生き延びますか?
     選択の積み重ねで、あなたの「タイプ」が判定されます。
   </p>
 
   <div data-sp-count>
     <p class="sp-note"></p>
-    <div data-sp="20" data-sp-label="2年生編5巻">
+    <div data-sp="3" data-sp-label="書籍3巻">
       <div id="tk-start" class="card panel">
         <h2>{taiken.title}</h2>
         <p style="font-size: 0.95rem;">{taiken.intro}</p>
         <p class="muted" style="font-size: 0.8rem;">
-          ⚠ このシナリオは2年生編5巻の特別試験を題材にしています(結末は原作と異なる場合があります)。
+          ⚠ このシナリオは書籍3〜4巻の魔大陸編を題材にしています(結末は原作と異なる場合があります)。
         </p>
         <button id="tk-begin" class="primary-btn">試験を開始する</button>
       </div>
@@ -30,7 +30,7 @@ import taiken from '../../data/taiken.json';
 
       <div id="tk-end" class="panel" hidden>
         <div class="card oaa-result">
-          <span class="oaa-app-tag">特別試験 適性判定</span>
+          <span class="oaa-app-tag">冒険者ギルド 適性鑑定</span>
           <div class="verdict">
             <div class="verdict-rank rank" id="tk-grade" data-rank="B">B</div>
             <div>
@@ -86,7 +86,7 @@ import taiken from '../../data/taiken.json';
       $('tk-grade').dataset.rank = e.grade;
       $('tk-title').textContent = e.title;
       $('tk-result').textContent = e.text;
-      const text = `満場一致特別試験を体験した結果…「${e.title}」(評価${e.grade})でした。あなたならどのボタンを押す? #よう実 #高育ポータル`;
+      const text = `魔大陸サバイバルを体験した結果…「${e.title}」(評価${e.grade})でした。あなたなら生き延びられる? #無職転生 #無職転生ポータル`;
       $('tk-share').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
       show('tk-end');
     };

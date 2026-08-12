@@ -3,16 +3,16 @@ import Base from '../../layouts/Base.astro';
 import quiz from '../../data/quiz.json';
 ---
 
-<Base title="原作知識クイズ" description="よう実の原作知識クイズ。難易度3段階・読了位置より先の問題は出題されません。">
+<Base title="原作知識クイズ" description="無職転生の原作知識クイズ。難易度3段階・読了位置より先の問題は出題されません。">
   <h1>✏️ 原作知識クイズ</h1>
   <p class="muted">各難易度から10問をランダム出題。読了位置(右上📖)より先の内容はネタバレ防止のため出題されません。</p>
 
   <div id="quiz-start" class="card panel">
     <h2>難易度を選択</h2>
     <div class="level-btns">
-      <button class="level-btn" data-level="1">基礎<br /><small>アニメ視聴でもOK</small></button>
-      <button class="level-btn" data-level="2">応用<br /><small>1年生編読了向け</small></button>
-      <button class="level-btn" data-level="3">上級<br /><small>2年生編読了向け</small></button>
+      <button class="level-btn" data-level="1">基礎<br /><small>アニメ1期視聴でもOK</small></button>
+      <button class="level-btn" data-level="2">応用<br /><small>魔法大学編まで読了向け</small></button>
+      <button class="level-btn" data-level="3">上級<br /><small>完結まで読了向け</small></button>
     </div>
     <p id="quiz-availability" class="muted" style="font-size: 0.82rem;"></p>
   </div>
@@ -29,7 +29,7 @@ import quiz from '../../data/quiz.json';
   </div>
 
   <div id="quiz-end" class="card panel" hidden>
-    <h2>試験終了</h2>
+    <h2>鑑定結果</h2>
     <div class="verdict">
       <div class="verdict-rank rank" id="end-rank" data-rank="A">A</div>
       <div>
@@ -48,7 +48,7 @@ import quiz from '../../data/quiz.json';
     let pool = [], idx = 0, score = 0, currentLevel = 1;
     const LEVEL_NAMES = { 1: '基礎', 2: '応用', 3: '上級' };
 
-    const progress = () => (window.ANHS ? window.ANHS.progress : 0);
+    const progress = () => (window.MUSHOKU ? window.MUSHOKU.progress : 0);
     const available = (level) => quiz.filter((q) => q.level === level && q.sp <= progress());
 
     const updateAvailability = () => {
@@ -58,7 +58,7 @@ import quiz from '../../data/quiz.json';
         b.disabled = available(Number(b.dataset.level)).length < 3;
       });
     };
-    document.addEventListener('anhs:progress', updateAvailability);
+    document.addEventListener('mushoku:progress', updateAvailability);
     window.addEventListener('DOMContentLoaded', updateAvailability);
 
     const show = (panel) => {
@@ -101,17 +101,17 @@ import quiz from '../../data/quiz.json';
       const pct = score / pool.length;
       const rank = pct >= 0.9 ? 'A' : pct >= 0.7 ? 'B' : pct >= 0.5 ? 'C' : pct >= 0.3 ? 'D' : 'E';
       const comments = {
-        A: 'ホワイトルーム級。あなたの知識は学年トップクラスです。',
-        B: 'Aクラス昇格圏内。かなりの読み込みです。',
-        C: '平均点クリア。赤点の心配はありません。',
-        D: '追試ライン。もう一周読み直しましょう。',
-        E: '退学の危機です。1巻から読み直すことをお勧めします。',
+        A: 'Sランク冒険者級。オルステッドも一目置く知識量です。',
+        B: 'Aランク相当。魔法大学の特別生になれる読み込みです。',
+        C: 'Bランク相当。旅の路銀には困りません。',
+        D: 'Fランクの駆け出し。もう一周読み直しましょう。',
+        E: '転移直後の迷子状態です。1巻から読み直すことをお勧めします。',
       };
       $('end-rank').textContent = rank;
       $('end-rank').dataset.rank = rank;
       $('end-score').textContent = `${LEVEL_NAMES[currentLevel]}コース ${score} / ${pool.length} 問正解`;
       $('end-comment').textContent = comments[rank];
-      const text = `よう実知識クイズ(${LEVEL_NAMES[currentLevel]})で ${score}/${pool.length} 問正解、評価${rank}ランクでした! #よう実 #高育ポータル`;
+      const text = `無職転生 知識クイズ(${LEVEL_NAMES[currentLevel]})で ${score}/${pool.length} 問正解、評価${rank}ランクでした! #無職転生 #無職転生ポータル`;
       $('q-share').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
       show('quiz-end');
     };
