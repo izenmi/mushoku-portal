@@ -1,5 +1,5 @@
 ---
-// OAA風 4軸レーダーチャート(学力/身体能力/機転思考力/社会貢献性)
+// ギルドカード風 4軸レーダーチャート(魔術/剣・武技/体術・実戦/知略)
 interface Props {
   values: { label: string; grade: string; score: number }[]; // 4件, score 0-100
   size?: number;
@@ -22,7 +22,7 @@ const labelPos = [
 ];
 ---
 
-<svg viewBox="-28 0 356 210" width={size * 1.36} role="img" aria-label="OAA能力チャート" class="radar">
+<svg viewBox="-28 0 356 210" width={size * 1.36} role="img" aria-label="能力チャート" class="radar">
   {[0.25, 0.5, 0.75, 1].map((ratio) => (
     <polygon points={ring(ratio)} fill="none" stroke="var(--line)" stroke-width={ratio === 1 ? 1.6 : 1} />
   ))}

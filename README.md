@@ -1,43 +1,33 @@
-# Astro Starter Kit: Minimal
+# 無職転生ポータル - 冒険者ギルド資料室
+
+『無職転生 〜異世界行ったら本気だす〜』(理不尽な孫の手・KADOKAWA/MFブックス)の**非公式ファンサイト**です。
+
+公開URL: https://izenmi.github.io/mushoku-portal/
+
+## 特徴
+
+- 🗂️ ギルドカード風の人物名鑑(パラメトリックSVGによる自作肖像+能力チャート)
+- 🛡️ 戦い・事件の記録 / 📈 ルーデウス成長記録 / 📜 甲龍暦年表 / 📖 用語集・図解
+- 🕸️ 人物相関図、🏆 強さランキング、⚔️ VS比較、📅 年齢早見表
+- ✏️ クイズ / 🧭 流派適性診断 / 🎭 魔大陸体験ADV / 💪 修行場ミニゲーム
+- 📕 **読了進捗式ネタバレ制御**: 書籍版1〜26巻の読了位置を設定すると、先の情報を自動でぼかし・非表示(localStorage のみ、外部送信なし)
+
+## 技術構成
+
+- [Astro](https://astro.build)(完全静的ビルド、依存は astro のみ)
+- データは `src/data/*.json`。各データの `sp` フィールドが `src/data/timeline.json` の巻序数 `ord` を参照し、`data-sp` 属性でネタバレ制御される
+- GitHub Actions で main への push 時に GitHub Pages へ自動デプロイ
+
+## 開発
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev      # 開発サーバ
+npm run build    # ./dist/ へ静的ビルド
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 権利について
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+本サイトは非公式のファンサイトであり、原作者・出版社・アニメ製作委員会とは一切関係ありません。
+掲載イラストはすべて管理人による自作で、文章も管理人自身の言葉で書き起こしたものです。
+権利者からの要請があった場合、該当コンテンツは速やかに削除・修正します。

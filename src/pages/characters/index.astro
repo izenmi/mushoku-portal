@@ -46,7 +46,11 @@ const firstTier = (c: any) => c.tiers?.[0];
                 <strong>{s.name}</strong>
                 <small class="muted">{races[s.race]}</small>
                 {firstTier(s) && (
-                  <div class="mini-tier">
+                  <div
+                    class="mini-tier"
+                    data-sp={firstTier(s).sp > 1 ? firstTier(s).sp : undefined}
+                    data-sp-hide={firstTier(s).sp > 1 ? '' : undefined}
+                  >
                     <b class="tier" data-tier={firstTier(s).tier}>{firstTier(s).tier}</b>
                     <span>{firstTier(s).label}{firstTier(s).est ? '※' : ''}</span>
                   </div>
